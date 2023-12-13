@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends, HTTPException, Response
+from fastapi import APIRouter, Body, Depends, HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from starlette import status
 from fastapi.responses import JSONResponse  
@@ -41,8 +41,7 @@ async def get_teachers(
             "phone": item["phone"]
         }
         data_object.append(teacher)
-    # return JSONResponse({"data": data_object}, 200)
-    return Response(content={"data": data_object}, media_type="application/json")
+    return JSONResponse({"data": data_object}, 200)
     
 
 @router.get("/teacher/unassigned",

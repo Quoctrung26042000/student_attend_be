@@ -29,7 +29,6 @@ router = APIRouter()
 async def get_teachers(
     teacher_repo: TeacherRepository = Depends(get_repository(TeacherRepository)),
 ):
-    Response.headers["X-Cat-Dog"] = "alone in the world"
     teacher_list = await teacher_repo.search_teachers()
     data_object = []
     for item in teacher_list :

@@ -10,6 +10,7 @@ class AccountRepository(BaseRepository):
     async def get_account_by_email(self, *, email: str) -> AccountInDB:
         user_row = await queries.get_account_by_email(self.connection, email=email)
         if user_row:
+            print("USER ROWW", user_row)
             return AccountInDB(**user_row)
         raise EntityDoesNotExist("account with email {0} does not exist".format(email))
 
@@ -32,8 +33,9 @@ class AccountRepository(BaseRepository):
         email: str,
         password: str,
         role :int,
+        teacher_id:int
     ) -> AccountInDB:
-        account = AccountInDB(username=username, email=email, role=role)
+        account = AccountInDB(username=username, email=email, role=role, teacher_id=teacher_id)
         account.change_password(password)
         async with self.connection.transaction():
             account_row = await queries.create_new_account(
@@ -43,6 +45,7 @@ class AccountRepository(BaseRepository):
                 salt=account.salt,
                 hashed_password=account.hashed_password,
                 role=account.role,
+                teacher_id=account.teacher_id
             )
 
         return account.copy(update=dict(account_row))

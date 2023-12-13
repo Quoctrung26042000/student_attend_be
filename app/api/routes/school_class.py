@@ -37,7 +37,7 @@ async def get_all_class(class_repo: ClassRepository = Depends(get_repository(Cla
     name="register:class",
 )
 async def register_class(
-    class_create: ClassInCreate = Body(..., embed=True, alias="class"),
+    class_create: ClassInCreate = Body(...),
     class_repo: ClassRepository = Depends(get_repository(ClassRepository)),
 ) -> ClassInRepository:
     if (await check_class_is_taken(class_repo, class_create.class_name)):

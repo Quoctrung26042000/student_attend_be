@@ -26,13 +26,30 @@ class TeacherQueriesMixin:
         self,
         conn: Connection,
     ) -> Record: ...
+    
+    async def search_teacher_unassigned(
+        self,
+        conn: Connection,
+    ) -> Record: ...
+    
+    async def get_teacher_by_name(
+        self,
+        conn: Connection,
+        username:str
+    ) -> Record: ...
+
+    async def check_phone_is_taken(
+        self,
+        conn: Connection,
+        phone:str
+    ) -> Record: ...
   
 class SchoolQueriesMixin:
     
     async def create_new_grade(
         self,
         conn: Connection,
-        *,
+        *,  
         grade_name: int,
     ) -> Record: ...
     async def get_grades(self, conn: Connection) -> Record: ...
@@ -76,7 +93,9 @@ class AccountQueriesMixin:
         email: str,
         salt: str,
         hashed_password: str,
-        role : int
+        role : int,
+        teacher_id: int,
+        address: Optional[str]
     ) -> Record: ...
 
 

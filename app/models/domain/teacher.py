@@ -7,7 +7,7 @@ from app.services import security
 class Teacher(RWModel):
     name: str
     phone: str
-    homeroom_class: int
+    address: Optional[str]
     
 class TeacherInDB(IDModelMixin, DateTimeModelMixin, Teacher):
     pass

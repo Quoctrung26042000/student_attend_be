@@ -9,7 +9,8 @@ from app.db.repositories.school import GradeRepository
 from app.models.schemas.school import (
     GradeInCreate,
     GradeInRepository,
-    GradeInfo
+    GradeInfo,
+    GradeInDB
 )
 from app.resources import strings
 from app.services import jwt
@@ -26,7 +27,7 @@ router = APIRouter()
     name="register:grade",
 )
 async def register_grade(
-    grade_create: GradeInCreate = Body(..., embed=True, alias="grade"),
+    grade_create: GradeInCreate = Body(),
     grade_repo: GradeRepository = Depends(get_repository(GradeRepository)),
 ) -> GradeInRepository:
     

@@ -7,6 +7,7 @@ SELECT id,
        bio,
        image,
        role,
+       teacher_id,
        created_at,
        updated_at
 FROM account
@@ -23,6 +24,7 @@ SELECT id,
        bio,
        image,
        role,
+       teacher_id,
        created_at,
        updated_at
 FROM account
@@ -31,8 +33,8 @@ LIMIT 1;
 
 
 -- name: create-new-account<!
-INSERT INTO account (username, email, salt, hashed_password, role)
-VALUES (:username, :email, :salt, :hashed_password, :role)
+INSERT INTO account (username, email, salt, hashed_password, role, teacher_id)
+VALUES (:username, :email, :salt, :hashed_password, :role, CASE WHEN :role = 0 THEN NULL ELSE CAST(:teacher_id AS INTEGER) END)
 RETURNING
     id, created_at, updated_at;
 

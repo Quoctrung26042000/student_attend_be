@@ -13,6 +13,7 @@ class GradeInCreate(RWSchema):
 class GradeInRepository(GradeInCreate):
     pass
 
+
 class GradeInfo(RWSchema):
     data : List[GradeInDB]
 

@@ -8,9 +8,8 @@ from app.services import security
 class Account(RWModel):
     username: str
     email: str
-    bio: str = ""
-    image: Optional[str] = None
     role : int
+    teacher_id: Optional[int]
 
 
 class AccountInDB(IDModelMixin, DateTimeModelMixin, Account):

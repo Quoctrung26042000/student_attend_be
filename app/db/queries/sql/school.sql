@@ -9,7 +9,7 @@ SELECT  grade_name FROM public.grades
 where grade_name = :grade_name ;
 
 -- name: get_grades
-SELECT * FROM public.grades
+SELECT id, grade_name FROM public.grades
 ORDER BY id ASC ;
 
 -- name: delete_grade_by_name!
@@ -18,8 +18,10 @@ FROM grades
 WHERE grade_name = :grade_name ;
 
 -- name: get_all_class
-SELECT * FROM public.class
-ORDER BY id ASC ;
+SELECT c.id, c.class_name, c.grade_id, c.quantity, g.grade_name
+FROM class c
+JOIN grades g ON c.grade_id = g.id
+ORDER BY c.id ASC;
 
 -- name: create-new-class<!
 INSERT INTO class (class_name, grade_id)

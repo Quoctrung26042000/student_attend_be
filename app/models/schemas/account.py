@@ -7,13 +7,14 @@ from app.models.schemas.rwschema import RWSchema
 
 
 class AccountInLogin(RWSchema):
-    email: EmailStr
-    password: str
+    email: Optional[EmailStr]
+    password: Optional[str]
 
 
 class AccountInCreate(AccountInLogin):
     username: str
     role : int
+    teacher_id : int
 
 
 class AccountInUpdate(BaseModel):
@@ -29,4 +30,4 @@ class AccountWithToken(Account):
 
 
 class AccountInResponse(RWSchema):
-    account: AccountWithToken
+    data: AccountWithToken

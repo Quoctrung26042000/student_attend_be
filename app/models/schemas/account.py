@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, HttpUrl
+from pydantic import BaseModel, EmailStr, HttpUrl, constr, validator
 
 from app.models.domain.account import Account
 from app.models.schemas.rwschema import RWSchema
@@ -8,8 +8,7 @@ from app.models.schemas.rwschema import RWSchema
 
 class AccountInLogin(RWSchema):
     email: Optional[EmailStr]
-    password: Optional[str]
-
+    password: constr(max_length=10)
 
 class AccountInCreate(AccountInLogin):
     username: str
@@ -27,7 +26,10 @@ class AccountInUpdate(BaseModel):
 
 class AccountWithToken(Account):
     token: str
+    teacher_name :Optional[str] = ""
 
+class AccountTeacher(Account):
+    teacher_name: str
 
 class AccountInResponse(RWSchema):
     data: AccountWithToken

@@ -38,10 +38,38 @@ class TeacherQueriesMixin:
         username:str
     ) -> Record: ...
 
+    async def get_teacher_by_id(
+        self,
+        conn: Connection,
+        teacher_id:id
+    ) -> Record: ...
+
+    async def delete_teacher_by_id(
+        self,
+        conn: Connection,
+        teacher_id:id
+    ) -> Record: ...
+
     async def check_phone_is_taken(
         self,
         conn: Connection,
         phone:str
+    ) -> Record: ...
+
+    async def teacher_update(
+        self,
+        conn: Connection,
+        teacher_id:int,
+        name:str,
+        phone:str,
+        address:str,
+    ) -> Record: ...
+
+    async def update_class_id(
+        self,
+        conn: Connection,
+        teacher_id:int,
+        class_id:int,
     ) -> Record: ...
   
 class SchoolQueriesMixin:
@@ -75,10 +103,13 @@ class SchoolQueriesMixin:
         self, conn: Connection, *, class_name: str
     ) -> Record: ...
 
+    async def update_teacher_is_null(
+        self, conn: Connection, *, class_id: int
+    ) -> Record: ...
 
-
-
-    
+    async def delete_class_id(
+        self, conn: Connection, *, class_id: int
+    ) -> Record: ...
 
 class AccountQueriesMixin:
     async def get_account_by_email(self, conn: Connection, *, email: str) -> Record: ...
@@ -212,6 +243,16 @@ class ArticlesQueriesMixin:
     ) -> None: ...
     async def get_articles_for_feed(
         self, conn: Connection, *, follower_username: str, limit: int, offset: int
+    ) -> Record: ...
+
+class StudentQueriesMixin:
+    async def create_new_student(
+        self,
+        conn: Connection,
+        *,
+        name: str,
+        phone: str,
+        class_id: int,
     ) -> Record: ...
 
 class Queries(

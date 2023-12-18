@@ -3,15 +3,14 @@ from typing import Optional
 from app.db.errors import EntityDoesNotExist
 from app.db.queries.queries import queries
 from app.db.repositories.base import BaseRepository
-from app.models.domain.account import Account, AccountInDB
+from app.models.domain.account import Account, AccountInDB, AccounInforInDB
 
 
 class AccountRepository(BaseRepository):
-    async def get_account_by_email(self, *, email: str) -> AccountInDB:
+    async def get_account_by_email(self, *, email: str) -> AccounInforInDB:
         user_row = await queries.get_account_by_email(self.connection, email=email)
         if user_row:
-            print("USER ROWW", user_row)
-            return AccountInDB(**user_row)
+            return AccounInforInDB(**user_row)
         raise EntityDoesNotExist("account with email {0} does not exist".format(email))
 
     async def get_account_by_username(self, *, username: str) -> AccountInDB:

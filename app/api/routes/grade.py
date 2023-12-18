@@ -10,7 +10,8 @@ from app.models.schemas.school import (
     GradeInCreate,
     GradeInRepository,
     GradeInfo,
-    GradeInDB
+    GradeInDB,
+    GradeList
 )
 from app.resources import strings
 from app.services import jwt
@@ -44,12 +45,13 @@ async def register_grade(
 
 @router.get(
     "/grade",
-    response_model=GradeInfo,
+    response_model=GradeList,
     name="Get:grades",
 )
 async def get_grades(grade_repo: GradeRepository = Depends(get_repository(GradeRepository))):
     grades = await grade_repo.get_grades()
-    return GradeInfo(
+    
+    return GradeList(
         data=grades
     )
 

@@ -41,6 +41,7 @@ class GradeRepository(BaseRepository):
 class ClassRepository(BaseRepository):
     async def get_all_class(self) -> List[str] :
         class_row = await queries.get_all_class(self.connection)
+        print(class_row)
         return class_row
     
     async def get_class_by_name(self, class_name: str):
@@ -51,11 +52,20 @@ class ClassRepository(BaseRepository):
             "class with class_name {0} does not exist".format(class_name),
         )
     
+    async def delete_class_id(self, class_id: int):
+        class_del = await queries.delete_class_id(self.connection, class_id=class_id)
+        return class_del
+    
+    async def update_teacher_is_null(self, class_id: int):
+        teacher_update = await queries.update_teacher_is_null(self.connection, class_id=class_id)
+        return teacher_update
+    
     async def create_class(
         self,
         *,
         class_name: str,
-        grade_id: int
+        grade_id: int,
+        quantity:int
     ) -> ClassInDB:
         class_created = ClassInDB(class_name=class_name, grade_id=grade_id)
         async with self.connection.transaction():
@@ -63,6 +73,7 @@ class ClassRepository(BaseRepository):
                 self.connection,
                 class_name=class_created.class_name,
                 grade_id=class_created.grade_id,
+                quantity= quantity
             )
         return  class_created.copy(update=dict(class_row))
    

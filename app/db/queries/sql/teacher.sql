@@ -10,12 +10,21 @@ ORDER BY c.id ASC;
 -- ORDER BY c.id ASC;
 
 -- name: search_teacher_unassigned
-SELECT  id , username
+SELECT  id As "value", username As "label"
 FROM teacher where homeroom_class_id is null
  
 --name: get_teacher_by_name<!
 SELECT  id , username, phone , address, homeroom_class_id
 FROM teacher where username= :username;
+
+--name: get_teacher_by_id<!
+SELECT  id , username, phone , address, homeroom_class_id
+FROM teacher where id= :teacher_id;
+
+--name: delete_teacher_by_id<!
+Delete FROM teacher where id= :teacher_id
+RETURNING
+    id, created_at, updated_at; 
 
 --name: check_phone_is_taken<!
 SELECT  id , username, phone , address, homeroom_class_id
@@ -26,3 +35,18 @@ INSERT INTO teacher (username, phone, address)
 VALUES (:name, :phone,  :address)
 RETURNING
     id, created_at, updated_at;
+
+-- name: teacher-update<!
+UPDATE teacher
+SET username = :name,
+    phone = :phone,
+    address = :address
+WHERE id = :teacher_id
+RETURNING id, created_at, updated_at;
+
+
+-- name: update_class_id<!
+UPDATE teacher
+SET homeroom_class_id = :class_id
+WHERE id = :teacher_id
+RETURNING id, created_at, updated_at;

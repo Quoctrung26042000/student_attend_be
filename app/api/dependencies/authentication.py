@@ -5,6 +5,7 @@ from fastapi import Depends, HTTPException, Security
 from fastapi.security import APIKeyHeader
 from starlette import requests, status
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.responses import JSONResponse  
 
 from app.api.dependencies.database import get_repository
 from app.core.config import get_app_settings
@@ -27,10 +28,8 @@ class RWAPIKeyHeader(APIKeyHeader):
         try:
             return await super().__call__(request)
         except StarletteHTTPException as original_auth_exc:
-            raise HTTPException(
-                status_code=original_auth_exc.status_code,
-                detail=strings.AUTHENTICATION_REQUIRED,
-            )
+            return JSONResponse({"error":strings.AUTHENTICATION_REQUIRED},400)
+ 
 
 
 def get_current_user_authorizer(*, required: bool = True) -> Callable:  # type: ignore
@@ -51,15 +50,11 @@ def _get_authorization_header(
     try:
         token_prefix, token = api_key.split(" ")
     except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=strings.WRONG_TOKEN_PREFIX,
-        )
+        JSONResponse({"error":strings.WRONG_TOKEN_PREFIX},400)
+
     if token_prefix != settings.jwt_token_prefix:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=strings.WRONG_TOKEN_PREFIX,
-        )
+        return JSONResponse({"error":strings.WRONG_TOKEN_PREFIX},400)
+ 
 
     return token
 
@@ -87,18 +82,11 @@ async def _get_current_user(
             str(settings.secret_key.get_secret_value()),
         )
     except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=strings.MALFORMED_PAYLOAD,
-        )
-
+        return JSONResponse({"error":strings.MALFORMED_PAYLOAD},400)
     try:
         return await users_repo.get_account_by_username(username=username)
     except EntityDoesNotExist:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=strings.MALFORMED_PAYLOAD,
-        )
+        return JSONResponse({"error":strings.MALFORMED_PAYLOAD},400)
 
 
 async def _get_current_user_optional(

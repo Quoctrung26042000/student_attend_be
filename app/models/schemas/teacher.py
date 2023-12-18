@@ -1,6 +1,6 @@
 from typing import Optional, List
-
-from pydantic import BaseModel, EmailStr, HttpUrl, validator
+from app.resources import strings
+from pydantic import BaseModel, EmailStr, HttpUrl, validator, Field, ValidationError
 from fastapi.responses import JSONResponse  
 
 from app.models.domain.teacher import Teacher
@@ -14,17 +14,33 @@ class TeacherInCreate(RWSchema):
     phone: Optional[str] = None
     address: Optional[str] = None
 
+
 class TeacherInResponse(BaseModel):
     id: int
     name:str
-    homeroomClass:str
-    address:str
-    phone:str
+    homeroomClassId: Optional[int] 
+    homeroomClass: Optional[str]
+    address: Optional[str] = None
+    phone: str
+
+class TeacherInResponseBase(BaseModel):
+    value :int
+    label :str
 
 class TeacherInResponseCreate(BaseModel):
-    name : str
-    phone :str
+    name:str
+    phone:str
     address:str
+
+class TeacherIsDel(BaseModel):
+    id: int
+
 
 class TeacherList(BaseModel):
     data : List[TeacherInResponse]
+
+class TeacherUnassignedList(BaseModel):
+    data : List[TeacherInResponseBase]
+
+class TeacherInUpdate(TeacherInResponse):
+    pass

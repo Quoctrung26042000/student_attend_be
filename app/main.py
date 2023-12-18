@@ -8,6 +8,8 @@ from app.api.errors.validation_error import http422_error_handler
 from app.api.routes.api import router as api_router
 from app.core.config import get_app_settings
 from app.core.events import create_start_app_handler, create_stop_app_handler
+from fastapi_validation_i18n import I18nMiddleware, i18n_exception_handler
+
 
 
 def get_application() -> FastAPI:
@@ -16,6 +18,7 @@ def get_application() -> FastAPI:
     settings.configure_logging()
 
     application = FastAPI(**settings.fastapi_kwargs)
+
 
     application.add_middleware(
         CORSMiddleware,
@@ -35,7 +38,11 @@ def get_application() -> FastAPI:
     )
 
     application.add_exception_handler(HTTPException, http_error_handler)
-    application.add_exception_handler(RequestValidationError, http422_error_handler)
+    application.add_middleware(I18nMiddleware, locale_path='app/resources/lang')
+    application.add_exception_handler(RequestValidationError, http422_error_handler(i18n_exception_handler))
+
+    # application.add_middleware(I18nMiddleware, locale_path='app/resources/lang')
+    # application.add_exception_handler(RequestValidationError, http422_error_handler)
 
     application.include_router(api_router, prefix=settings.api_prefix)
 

@@ -33,11 +33,12 @@ async def login(
 
     try:
         user = await users_repo.get_account_by_email(email=user_login.email)
+        
+        if user.teacher_name is None:
+            user.teacher_name = "Admin"
     except Exception as e:
         return wrong_login_error 
     
-
-
     if not user.check_password(user_login.password):
         return wrong_login_error
 
@@ -51,7 +52,8 @@ async def login(
             email=user.email,
             token=token,
             role = user.role,
-            teacher_id = user.teacher_id
+            teacher_id = user.teacher_id,
+            teacher_name=user.teacher_name
         ),
     )
 
@@ -75,9 +77,7 @@ async def register(
     if await check_email_account_is_taken(users_repo, user_create.email):
         return JSONResponse({"error":strings.EMAIL_TAKEN},400)
     
-    
     user = await users_repo.create_account(**user_create.dict())
-
     token = jwt.create_access_token_for_user(
         user,
         str(settings.secret_key.get_secret_value()),
@@ -91,6 +91,28 @@ async def register(
             teacher_id=user.teacher_id,
         ),
     )
+
+@router.get("/me")
+async def protected_route(token: str,
+                        settings: AppSettings = Depends(get_app_settings),
+                        users_repo: AccountRepository = Depends(get_repository(AccountRepository))):
+    try :
+        username = jwt.get_username_from_token(
+                token,
+                str(settings.secret_key.get_secret_value()),
+            )
+        account = await users_repo.get_account_by_username(username=username)
+        return AccountInResponse(
+                data=AccountWithToken(
+                    username=account.username,
+                    email=account.email,
+                    role=account.role,
+                    token=token,
+                    teacher_id=account.teacher_id,
+                ),
+                )
+    except Exception as e :
+        return JSONResponse({"error":strings.VERIFY_TOKEN},400)
 
 
 

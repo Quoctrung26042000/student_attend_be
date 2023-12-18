@@ -1,17 +1,17 @@
 -- name: get_account_by_email^
-SELECT id,
-       username,
-       email,
-       salt,
-       hashed_password,
-       bio,
-       image,
-       role,
-       teacher_id,
-       created_at,
-       updated_at
-FROM account
-WHERE email = :email
+SELECT a.id,
+       a.username,
+       a.email,
+       a.salt,
+       a.hashed_password,
+       a.role,
+       a.teacher_id,
+       a.created_at,
+       a.updated_at,
+       t.username AS teacher_name
+FROM account a
+LEFT JOIN teacher t ON a.teacher_id = t.id
+WHERE a.email = :email
 LIMIT 1;
 
 
@@ -20,10 +20,8 @@ SELECT id,
        username,
        email,
        salt,
-       hashed_password,
-       bio,
-       image,
        role,
+       hashed_password,
        teacher_id,
        created_at,
        updated_at

@@ -28,7 +28,7 @@ router = APIRouter()
     response_model=StudentList,
     name="get:student",
 )
-async def register_student(
+async def get_student(
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
 ) ->StudentList :
     all_student =  await student_repo.get_all_student()

@@ -311,6 +311,12 @@ class StudentQueriesMixin:
     #     new_id:int
     # ) -> Record: ...
 
+class AttendQueriesMixin:
+    async def get_attend_infors(
+        self, conn: Connection, *, class_id: id
+    ) -> Record: ...
+
+
 class Queries(
     TagsQueriesMixin,
     UsersQueriesMixin,
@@ -319,7 +325,8 @@ class Queries(
     ArticlesQueriesMixin,
     TeacherQueriesMixin,
     SchoolQueriesMixin,
-    StudentQueriesMixin
+    StudentQueriesMixin,
+    AttendQueriesMixin
 ): ...
 
 queries: Queries

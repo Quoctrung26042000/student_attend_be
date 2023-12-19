@@ -82,6 +82,7 @@ def create_teacher_table() -> None:
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("username", sa.Text),
         sa.Column("phone", sa.Text, unique=True, nullable=False, index=True),
+        sa.Column("quantity", sa.Integer, nullable=True),
         sa.Column(
             "homeroom_class_id",
             sa.Integer,

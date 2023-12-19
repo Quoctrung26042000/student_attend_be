@@ -1,17 +1,17 @@
 # API messages
 PER_DENIED="Không có quyền truy cập"
-
 SEVER_ERROR = "Lỗi Máy chủ"
+
 TEACHER_EXITS = "Giáo viên đã tồn tại"
 TEACHER_DO_NOT_EXITS="Giáo viên không tồn tại"
 PHONE_EXITS = "Số điện thoại đã tồn tại "
 MISSNAME = "Phải nhập tên"
 MISSPHONE = "Phải nhập số điện thoại"
 
+STUDENT_EXITS="Học sinh đã tồn tại"
+STUDENT_DO_NOT_EXITS="Học sinh không tồn tại"
+
 USER_DOES_NOT_EXIST_ERROR = "Người dùng không tồn tại"
-ARTICLE_DOES_NOT_EXIST_ERROR = "article does not exist"
-ARTICLE_ALREADY_EXISTS = "article already exists"
-USER_IS_NOT_AUTHOR_OF_ARTICLE = "you are not an author of this article"
 
 GRADE_TAKEN = "Tên lớp đã tồn tại"
 GRADE_DOES_NOT_EXIST = "Tên lớp chưa tồn tại"

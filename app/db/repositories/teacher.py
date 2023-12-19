@@ -9,7 +9,6 @@ from app.models.domain.teacher import Teacher, TeacherInDB
 class TeacherRepository(BaseRepository):
     async def get_teacher_by_name(self, *, teacher_name: str) :
         teacher_row = await queries.get_teacher_by_name(self.connection, username=teacher_name)
-        
         return teacher_row
     
     async def get_teacher_by_id(self, *, teacher_id: int) :

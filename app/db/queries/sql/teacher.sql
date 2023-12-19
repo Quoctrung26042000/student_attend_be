@@ -22,7 +22,7 @@ SELECT  id , username, phone , address, homeroom_class_id
 FROM teacher where id= :teacher_id;
 
 --name: delete_teacher_by_id<!
-Delete FROM teacher where id= :teacher_id
+DELETE FROM teacher where id= :teacher_id
 RETURNING
     id, created_at, updated_at; 
 

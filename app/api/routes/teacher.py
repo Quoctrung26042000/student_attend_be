@@ -119,7 +119,6 @@ async def update_teacher(teacher_id: int,
                                                           name=teacher_update.name,
                                                           phone=teacher_update.phone,
                                                           address=teacher_update.address)
-    print(teacher_is_update)
 
     return TeacherInResponseCreate(
         name = teacher_is_update.name,
@@ -136,9 +135,7 @@ async def delete_teacher(teacher_id: int,
     if teacher is None:
        return JSONResponse({"error":strings.TEACHER_DO_NOT_EXITS},400)
 
-    teacher_delete = await teacher_repo.delete_teacher_by_id(teacher_id=teacher_id)
+    await teacher_repo.delete_teacher_by_id(teacher_id=teacher_id)
 
-    return TeacherIsDel(
-        id = teacher_id
-    )
+    return teacher_id
 

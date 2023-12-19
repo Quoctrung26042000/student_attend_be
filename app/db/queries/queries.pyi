@@ -252,8 +252,64 @@ class StudentQueriesMixin:
         *,
         name: str,
         phone: str,
+        gender:int,
+        address:str,
+        date_of_birth:str,
         class_id: int,
     ) -> Record: ...
+
+    async def student_update(
+        self,
+        conn: Connection,
+        *,
+        name: str,
+        phone: str,
+        gender:int,
+        address:str,
+        date_of_birth:str,
+        class_id: int,
+    ) -> Record: ...
+
+    async def get_all_student(
+        self,
+        conn: Connection,
+    ) -> Record: ...
+
+    async def update_quantity(
+        self,
+        conn: Connection,
+        *,
+        class_id: int,
+    ) -> Record: ...
+
+    async def get_student_by_name(
+        self,
+        conn: Connection,
+        *,
+        name: str,
+    ) -> Record: ...
+
+    async def get_student_by_phone(
+        self,
+        conn: Connection,
+        *,
+        phone: str,
+    ) -> Record: ...
+
+    async def delete_student_by_id(
+        self,
+        conn: Connection,
+        *,
+        id: int,
+    ) -> Record: ...
+
+    # async def update_quantity_change_class(
+    #     self,
+    #     conn: Connection,
+    #     *,
+    #     old_id:int,
+    #     new_id:int
+    # ) -> Record: ...
 
 class Queries(
     TagsQueriesMixin,
@@ -263,6 +319,7 @@ class Queries(
     ArticlesQueriesMixin,
     TeacherQueriesMixin,
     SchoolQueriesMixin,
+    StudentQueriesMixin
 ): ...
 
 queries: Queries

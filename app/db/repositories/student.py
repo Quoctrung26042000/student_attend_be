@@ -7,19 +7,28 @@ from app.models.domain.student import Student, StudentInDB
 
 
 class StudentRepository(BaseRepository):
-    async def get_student_by_name(self, *, teacher_name: str) :
-        teacher_row = await queries.get_teacher_by_name(self.connection, username=teacher_name)
-        
-        return teacher_row
+    async def get_student_by_id(self, *, id: int) :
+        student_row = await queries.get_student_by_id(self.connection, id=id)
+        return student_row
     
-    async def get_student_by_id(self, *, teacher_id: int) :
-        teacher_row = await queries.get_teacher_by_id(self.connection, teacher_id=teacher_id)
-        return teacher_row
+    async def get_student_by_name(self, *, name: str) :
+        student_row = await queries.get_student_by_name(self.connection, name=name)
+        return student_row
     
-    async def delete_teacher_by_id(self, *, teacher_id: int) :
-        teacher_row = await queries.delete_teacher_by_id(self.connection, teacher_id=teacher_id)
-        print("Teacher Row", teacher_row)
-        return teacher_row
+    async def get_student_by_phone(self, *, phone: str) :
+        student_row = await queries.get_student_by_phone(self.connection, phone=phone)
+        return student_row
+    
+    async def delete_student_by_id(self, *, id: int) :
+        async with self.connection.transaction():
+            student_row = await queries.delete_student_by_id(self.connection, id=id)
+            await queries.update_quantity(self.connection,variable=-1,class_id=student_row["class_id"])
+        return student_row
+    
+    async def get_all_student(self) :
+        async with self.connection.transaction():
+            student_row = await queries.get_all_student(self.connection)
+        return student_row
     
     async def create_student(
         self,
@@ -28,19 +37,47 @@ class StudentRepository(BaseRepository):
         phone: str,
         gender: int,
         address: Optional[str],
-        date_of_birth:date,
-        class_id:int,
+        dateOfBirth:str,
+        classId:int,
     ) -> StudentInDB:
         student = StudentInDB(name=name, phone=phone, address=address,
-                            gender=gender, date_of_birth=date_of_birth,
-                            class_id=class_id)
+                            gender=gender, dateOfBirth=dateOfBirth,
+                            classId=classId)
         async with self.connection.transaction():
-            student_row = await queries.create_new_student(
+            await queries.create_new_student(
                 self.connection,
                 name=student.name,
                 phone=student.phone,
-                address=student.address
+                gender=student.gender,
+                address=student.address,
+                date_of_birth=student.dateOfBirth,
+                class_id=student.classId
             )
-        return student.copy(update=dict(student_row))
+            await queries.update_quantity(self.connection,variable=1,class_id=classId)
+        return student
+    
+    async def student_update(self, *,
+                              id:int,
+                              current_class_id:int,
+                              object:dict) :
+        student = StudentInDB(**object.dict())
+        async with self.connection.transaction():
+            student_row = await queries.student_update(
+                self.connection,
+                id=id,
+                name=student.name,
+                phone=student.phone,
+                gender=student.gender,
+                address=student.address,
+                date_of_birth=student.dateOfBirth,
+                class_id=student.classId,
+            )
+            if current_class_id != student.classId:
+                # reduce the number of class 
+                await queries.update_quantity(self.connection,variable=-1,class_id=current_class_id)
+                
+                # increasing the number
+                await queries.update_quantity(self.connection,variable=1,class_id=student.classId)
+        return student
     
   

@@ -11,39 +11,87 @@ from app.db.errors import EntityDoesNotExist
 from app.db.repositories.student import StudentRepository
 from app.models.schemas.student import (
     StudentInCreate,
-    StudentInResponse
+    StudentInResponse,
+    StudentList,
+    StudentInUpdate
 )
 from app.resources import strings
 from app.services import jwt
-from app.services.teacher import check_teacher_is_taken, check_phone_is_taken
+from app.services.student import check_student_is_taken, check_phone_is_taken
 
 from typing import Optional, List
 
 router = APIRouter()
+
+@router.get(
+    "/student",
+    response_model=StudentList,
+    name="get:student",
+)
+async def register_student(
+    student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
+) ->StudentList :
+    all_student =  await student_repo.get_all_student()
+
+    data_object = []
+    if all_student:
+        data_object = [StudentInResponse(**item) for item in all_student]
+
+    return StudentList(data=data_object)
 
 @router.post(
     "/student",
     status_code=HTTP_201_CREATED,
     name="register:student",
 )
-async def register_teacher(
-    student_create: StudentInCreate = Body(...,),
+async def register_student(
+    student_create: StudentInUpdate = Body(...,),
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
 ) -> StudentRepository:
 
-    # if await check_teacher_is_taken(teacher_repo, teacher_name=teacher_create.name) == True:
-    #     return JSONResponse({"error":strings.TEACHER_EXITS},400)
+    if await check_student_is_taken(student_repo, name=student_create.name) == True:
+        return JSONResponse({"errors":{"name":strings.STUDENT_EXITS}},400)
     
-    # if await check_phone_is_taken(teacher_repo, phone=teacher_create.phone) == True:
-    #     return JSONResponse({"error":strings.PHONE_EXITS},400)
+    if await check_phone_is_taken(student_repo, phone=student_create.phone) == True:
+        return JSONResponse({"errors":{"phone":strings.PHONE_EXITS}},400)
     
-    teacher_created = await student_repo.create_student(**student_create.dict())
+    student_created = await student_repo.create_student(**student_create.dict())
  
-    return StudentInResponse(
-        name = teacher_created.name,
-        phone = teacher_created.phone,
-        address = teacher_created.address
-    )
+    return student_created
+
+@router.delete(
+    "/student/{student_id}",
+    name="delete:student",
+)
+async def delete_student(student_id:int,
+    student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
+):
+    await student_repo.delete_student_by_id(id=student_id)
+
+    return student_id
+
+@router.patch(
+    "/student/{student_id}",
+    name="edit:student",
+)
+async def edit_student(student_id:int,
+                       student_update: StudentInUpdate = Body(...,),
+                       student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
+):
+    # Current student 
+    current_student = await student_repo.get_student_by_id(id=student_id)
+    if current_student is None:
+        return JSONResponse({"errors":strings.STUDENT_DO_NOT_EXITS},400)
+    
+    current_class_id = current_student['class_id']
+    student_is_update = await student_repo.student_update(id=student_id,
+                                                          current_class_id=current_class_id,
+                                                          object=student_update)
+
+    return student_is_update
+
+
+ 
 
 
 

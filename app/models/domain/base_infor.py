@@ -20,6 +20,8 @@ class Base(BaseModel):
         return v
     
 
+    
+
 class BaseInfor(Base):
     dateOfBirth: date
     @validator("dateOfBirth", pre=True)

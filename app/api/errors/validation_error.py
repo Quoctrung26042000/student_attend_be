@@ -56,7 +56,7 @@ def http422_error_handler(
             return JSONResponse(
                 status_code=400,
                 content=jsonable_encoder(
-                    {"error": reformatted_message}
+                    {"errors": reformatted_message}
                 ),
             )
 

@@ -28,8 +28,9 @@ try :
         result = connection.execute(query)
         all_students = result.fetchall()
         for student in all_students:
-            student_id = student['id']  
-            insert_query = insert(attendance_table).values(student_id=student_id)
+            student_id = student['id'] 
+            statuts = 2 
+            insert_query = insert(attendance_table).values(student_id=student_id, status=statuts)
             connection.execute(insert_query)
 except Exception as e :
     logging.debug('Erro', e)

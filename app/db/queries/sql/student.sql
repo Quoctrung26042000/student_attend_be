@@ -25,16 +25,19 @@ SET quantity = quantity + :variable
 WHERE id = :class_id
 
 -- name: get_all_student
-SELECT s.id,
+SELECT 
+    s.id,
     s.name,
     s.phone,
     s.address,
     s.gender,
-    s.class_id As "classId",
-    s.date_of_birth As "dateOfBirth",
-    c.class_name As "className"
-FROM student s
-JOIN class c ON s.class_id = c.id
+    s.class_id AS "classId",
+    s.date_of_birth AS "dateOfBirth",
+    c.class_name AS "className"
+FROM 
+    student s 
+JOIN 
+    class c ON s.class_id = c.id;
 
 -- name: get_student_by_id<!
 SELECT  id , name, phone , address, gender, class_id

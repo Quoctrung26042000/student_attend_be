@@ -18,18 +18,29 @@ class StudentInCreate(BaseInfor):
 class StudentInUpdate(BaseInfor):
     gender: GenderEnum
     classId: conint(ge=1)
+
+    @validator("address")
+    def address_must_not_be_empty(cls, v):
+        if not v.strip():  
+            raise ValueError("Address must not be empty")
+        return v
  
-class StudentInResponse(BaseInfor):
+class StudentInResponse(Base):
+    id: int
     gender: GenderEnum
     classId: conint(ge=1)
     className:str
+    dateOfBirth:date
 
-    @classmethod
-    def from_create(cls, student_create: StudentInCreate):
-        return cls(
-            gender='male' if student_create.gender == GenderEnum.male else 'female',
-            classId=student_create.classId
-        )
+    # @classmethod
+    # def from_create(cls, student_create: StudentInCreate):
+    #     parsed_date = datetime.strptime(student_create.dateOfBirth, '%Y-%m-%d')
+    #     formatted_date = parsed_date.strftime('%d-%m-%Y')
+    #     return cls(
+    #         gender='male' if student_create.gender == GenderEnum.male else 'female',
+    #         classId=student_create.classId,
+    #         dateOfBirth=formatted_date
+    #     )
 
 class StudentList(BaseModel):
     data : List[StudentInResponse]

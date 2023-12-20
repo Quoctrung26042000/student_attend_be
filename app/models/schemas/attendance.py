@@ -1,8 +1,7 @@
 from typing import Optional, List
 from datetime import date, datetime
-from pydantic import BaseModel, conint, validator, constr
-
 from enum import IntEnum
+from pydantic import BaseModel, validator
 
 class StatusEnum(IntEnum):
     PRESENT = 1
@@ -11,12 +10,46 @@ class StatusEnum(IntEnum):
     EXCUSED_ABSENCE = 4
 
 class AttendanceClass(BaseModel):
+    id: int
+    phone: str
+    name: str
+    status: Optional[StatusEnum] = 2
+    note: Optional[str] = None
+    timeCheckIn: Optional[str] = None
+    timeCheckOut: Optional[str] = None
+
+    @validator("status")
+    def status_is_valid(cls, v):
+        status_values = set(item.value for item in StatusEnum)
+        if v.value not in status_values:
+            raise ValueError("Status must be one of the defined StatusEnum values")
+        return v
+
+    def __init__(self, **data):
+        if 'status' not in data or data['status'] is None:
+            data['status'] = StatusEnum.ABSENT
+        if 'timeCheckIn' in data and isinstance(data['timeCheckIn'], datetime):
+            data['timeCheckIn'] = data['timeCheckIn'].strftime('%Y-%m-%d %H:%M:%S')
+        if 'timeCheckOut' in data and isinstance(data['timeCheckOut'], datetime):
+            data['timeCheckOut'] = data['timeCheckOut'].strftime('%Y-%m-%d %H:%M:%S')
+        super().__init__(**data)
+
+class AttendanceClassList(BaseModel):
+    data: List[AttendanceClass]
+
+class AttendanceStatistics(BaseModel):
     id:int
-    phone:str
-    name:str
-    status: StatusEnum
-    note:str
-    timeCheckIn:str
-    timeCheckOut:str
+    grade:str
+    classId:int
+    className: str
+    quantity:int
+    present:int
+    absenceWithPermission:int
+    absenceWithoutPermission:int
+    late: int
+    homeroomTeacher: int
+    
+class AttendanceStatisList(BaseModel):
+    data: List
 
 

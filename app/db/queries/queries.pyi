@@ -316,6 +316,10 @@ class AttendQueriesMixin:
         self, conn: Connection, *, class_id: id
     ) -> Record: ...
 
+    async def get_statistic(
+        self, conn: Connection
+    ) -> Record: ...
+
 
 class Queries(
     TagsQueriesMixin,

@@ -30,9 +30,17 @@ class ClassInfoBase(BaseModel):
     teacher_id:Optional[int] = None
     homeroomTeacher:Optional[str] = None
 
+class ClassSelection(BaseModel):
+    value: int
+    label:str
+
 
 class ClassInfo(BaseModel):
     data : List[ClassInfoBase]
+
+
+class ClassListSelection(BaseModel):
+    data : List[ClassSelection]
 
 class ClassDel(BaseModel):
     id : int

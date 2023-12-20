@@ -10,4 +10,9 @@ class AttendanceRepository(BaseRepository):
         attend_row = await queries.get_attend_infors(self.connection, class_id=class_id)
         return attend_row
     
+    async def get_statistic(self) :
+        attend_row = await queries.get_statistic(self.connection)
+        return attend_row
+    
+    
     

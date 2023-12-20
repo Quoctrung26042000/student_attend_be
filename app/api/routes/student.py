@@ -32,6 +32,7 @@ async def get_student(
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
 ) ->StudentList :
     all_student =  await student_repo.get_all_student()
+    print("all_sudent", all_student)
 
     data_object = []
     if all_student:
@@ -49,8 +50,8 @@ async def register_student(
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
 ) -> StudentRepository:
 
-    if await check_student_is_taken(student_repo, name=student_create.name) == True:
-        return JSONResponse({"errors":{"name":strings.STUDENT_EXITS}},400)
+    # if await check_student_is_taken(student_repo, name=student_create.name) == True:
+    #     return JSONResponse({"errors":{"name":strings.STUDENT_EXITS}},400)
     
     if await check_phone_is_taken(student_repo, phone=student_create.phone) == True:
         return JSONResponse({"errors":{"phone":strings.PHONE_EXITS}},400)
@@ -80,9 +81,18 @@ async def edit_student(student_id:int,
 ):
     # Current student 
     current_student = await student_repo.get_student_by_id(id=student_id)
+    
     if current_student is None:
         return JSONResponse({"errors":strings.STUDENT_DO_NOT_EXITS},400)
     
+    # if current_student['name'] != student_update.name:
+    #     if await check_student_is_taken(student_repo, name=student_update.name) == True:
+    #         return JSONResponse({"errors":{"name":strings.STUDENT_EXITS}},400)
+        
+    if current_student['phone'] != student_update.phone:
+        if await check_phone_is_taken(student_repo, student_update.phone) == True:
+            return JSONResponse({"errors":{"phone":strings.PHONE_EXITS}},400)
+
     current_class_id = current_student['class_id']
     student_is_update = await student_repo.student_update(id=student_id,
                                                           current_class_id=current_class_id,

@@ -12,7 +12,9 @@ from app.models.schemas.school import (
     ClassInRepository,
     ClassInCreate,
     ClassDel,
-    ClassRepositoryCreate
+    ClassRepositoryCreate,
+    ClassSelection,
+    ClassListSelection
 )
 from app.resources import strings
 from app.services import jwt
@@ -22,6 +24,25 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
+
+@router.get(
+    "/class/selection",
+    response_model=ClassListSelection,
+    name="Get:infor",
+)
+async def get_all_class(class_repo: ClassRepository = Depends(get_repository(ClassRepository))):
+    all_class = await class_repo.get_all_class()
+
+    data_object = []
+    for item in all_class:
+        data = ClassSelection(
+            value=item["id"],
+            label=item["className"],
+
+        )
+        data_object.append(data)
+    
+    return ClassListSelection(data=data_object)
 
 @router.get(
     "/class",

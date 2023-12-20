@@ -10,7 +10,10 @@ from app.core.settings.app import AppSettings
 from app.db.errors import EntityDoesNotExist
 from app.db.repositories.attendance import AttendanceRepository
 from app.models.schemas.attendance import (
-    AttendanceClass
+    AttendanceClass,
+    AttendanceStatistics,
+    AttendanceClassList,
+    AttendanceStatisList
 )
 from app.resources import strings
 from app.services import jwt
@@ -20,17 +23,30 @@ from typing import Optional, List
 router = APIRouter()
 
 
- 
 @router.get(
     "/attendance/{class_id}",
     name="get:attendance",
 )
-async def register_student(class_id:int,
+async def get_atten(class_id:int,
     attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
 ) ->AttendanceClass :
     attend_infors =  await attend_repo.get_attend_infors(class_id=class_id)
+    print("attenaaaaaaaaaaa", attend_infors)
+    data_object = []
+    if attend_infors:
+        data_object = [AttendanceClass(**item) for item in attend_infors]
 
-    return attend_infors
+    return AttendanceClassList(data=data_object)
+
+
+@router.get(
+    "/statistics",
+)
+async def get_statistic(
+    attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
+) ->AttendanceStatisList :
+    attend_infors =  await attend_repo.get_statistic()
+    return AttendanceStatisList(data=attend_infors)
 
 
 

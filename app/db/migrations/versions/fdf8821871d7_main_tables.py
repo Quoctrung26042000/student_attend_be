@@ -62,7 +62,7 @@ def create_account_table() -> None:
             "teacher_id",
             sa.Integer,
             sa.ForeignKey("teacher.id", ondelete="CASCADE"),
-            nullable=False,
+            nullable=True,
         ),
         *timestamps(),
     )
@@ -82,7 +82,7 @@ def create_teacher_table() -> None:
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("username", sa.Text),
         sa.Column("phone", sa.Text, unique=True, nullable=False, index=True),
-        sa.Column("quantity", sa.Integer, nullable=True),
+        sa.Column("address", sa.Text, nullable=True),
         sa.Column(
             "homeroom_class_id",
             sa.Integer,
@@ -103,10 +103,10 @@ def create_student_table() -> None :
             sa.ForeignKey("class.id", ondelete="CASCADE"),
             nullable=False,
         ),
-        sa.Column("date_of_birth",sa.Text),
+        sa.Column("date_of_birth",sa.Date),
         sa.Column("gender",sa.Integer),
         sa.Column("address",sa.Text),
-        sa.Column("phone",sa.Text)
+        sa.Column("phone",sa.Text),
         *timestamps(),
     )
         
@@ -130,6 +130,18 @@ def create_grade_table() -> None:
         "grades",
         sa.Column("id", sa.Integer, primary_key=True),
         sa.Column("grade_name", sa.Integer, unique=True, nullable=False, index=True),
+        *timestamps(),
+    )
+
+def create_attendance_table() -> None:
+    op.create_table(
+        "attendance",
+        sa.Column("id", sa.Integer, primary_key=True),
+        sa.Column("student_id", sa.Integer,nullable=True,),
+        sa.Column("check_in", sa.TIMESTAMP(timezone=True)),
+        sa.Column("check_out", sa.TIMESTAMP(timezone=True)),
+        sa.Column("status", sa.Integer()),
+        sa.Column("note", sa.Text()),
         *timestamps(),
     )
 

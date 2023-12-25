@@ -18,7 +18,7 @@ FROM (
     JOIN student s ON a.student_id = s.id
 ) AS subquery
 WHERE 
-    class_id = 6 
+    class_id = :class_id
     AND DATE(create_at) >= CURRENT_DATE; 
 
 

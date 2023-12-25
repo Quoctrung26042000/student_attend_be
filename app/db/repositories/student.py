@@ -37,7 +37,7 @@ class StudentRepository(BaseRepository):
         phone: str,
         gender: int,
         address: Optional[str],
-        dateOfBirth:str,
+        dateOfBirth:date,
         classId:int,
     ) -> StudentInDB:
         student = StudentInDB(name=name, phone=phone, address=address,

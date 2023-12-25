@@ -65,11 +65,11 @@ async def login(
 async def register(
     user_create: AccountInCreate = Body(..., embed=False),
     users_repo: AccountRepository = Depends(get_repository(AccountRepository)),
-    user: Account = Depends(get_current_user_authorizer()),
+    # user: Account = Depends(get_current_user_authorizer()),
     settings: AppSettings = Depends(get_app_settings),
 ) -> AccountInResponse:
-    if user.role == 1 :
-        return JSONResponse({"error":strings.PER_DENIED},400)
+    # if user.role == 1 :
+    #     return JSONResponse({"error":strings.PER_DENIED},400)
 
     if await check_account_is_taken(users_repo, user_create.username):
         return JSONResponse({"error":strings.USERNAME_TAKEN},400)

@@ -337,9 +337,9 @@ class AttendQueriesMixin:
 
     async def update_attendance_student(
         self, conn: Connection,
-        student_id,
-        from_date,
-        to_date
+        attendance_id,
+        status,
+        note,
     ) -> Record: ...
 
     async def get_statistic_search(self, conn: Connection,from_date,to_date)-> Record: ...

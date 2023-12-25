@@ -60,4 +60,5 @@ class StatictInput(BaseModel):
     to_date :Optional[date]
 
 class StudentInUpdate(BaseModel):
-    pass
+    status:int
+    note:Optional[str] = ""

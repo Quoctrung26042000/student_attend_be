@@ -169,13 +169,13 @@ WHERE
     AND DATE(a.create_at) >= :from_date
 	AND DATE(a.create_at) <= :to_date;
 
-
 --name:update_attendance_student<!
 UPDATE attendance
 SET status = :status,
-    note = :note,
-WHERE id= : attendance_id
-RETURNING id, created_at, updated_at;
+    note = :note
+WHERE 
+id = :attendance_id
+RETURNING id, create_at, update_at;
 
 
 

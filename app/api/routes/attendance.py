@@ -122,14 +122,19 @@ async def get_attend_student_detail(
 
 
 @router.patch(
-    "/attendance_update",
+    "/attendance_update/{attendance_id}",
 )
 async def update_attendance_student(
+    attendance_id:int,
     student_update : StudentInUpdate = Body(),
     attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
 ) ->AttendanceClass :
 
-    await attend_repo.update_attendance_student(**student_update.dict())
+    update_row = await attend_repo.update_attendance_student(student_update=student_update,
+                                                attendance_id=attendance_id)
+    
+    return update_row
+
                                                                    
 
 

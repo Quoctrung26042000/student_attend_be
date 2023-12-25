@@ -8,7 +8,8 @@ SELECT a.id,
        a.teacher_id,
        a.created_at,
        a.updated_at,
-       t.username AS teacher_name
+       t.username AS "teacherName"
+       t.homeroom_class_id As "classId"
 FROM account a
 LEFT JOIN teacher t ON a.teacher_id = t.id
 WHERE a.email = :email

@@ -58,3 +58,6 @@ class StatictInput(BaseModel):
     class_id: Optional[int]
     from_date: Optional[date]
     to_date :Optional[date]
+
+class StudentInUpdate(BaseModel):
+    pass

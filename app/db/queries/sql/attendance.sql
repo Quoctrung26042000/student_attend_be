@@ -153,7 +153,6 @@ GROUP BY
 
 
 --name: search_attend_student_detail
-
 SELECT 
     a.note,
     DATE(a.create_at) AS "day",
@@ -169,6 +168,14 @@ WHERE
     a.student_id = :student_id
     AND DATE(a.create_at) >= :from_date
 	AND DATE(a.create_at) <= :to_date;
+
+
+--name:update_attendance_student<!
+UPDATE attendance
+SET status = :status,
+    note = :note,
+WHERE id= : attendance_id
+RETURNING id, created_at, updated_at;
 
 
 

@@ -14,7 +14,8 @@ from app.models.schemas.attendance import (
     AttendanceStatistics,
     AttendanceClassList,
     AttendanceStatisList,
-    StatictInput
+    StatictInput,
+    StudentInUpdate
 )
 from app.resources import strings
 from app.services import jwt
@@ -117,6 +118,19 @@ async def get_attend_student_detail(
                                                                     to_date=to_date_parsed)
     response = {'data': attend_infors, 'nameStudent':attend_infors[0]['nameStudent']}
     return response
+
+
+
+@router.patch(
+    "/attendance_update",
+)
+async def update_attendance_student(
+    student_update : StudentInUpdate = Body(),
+    attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
+) ->AttendanceClass :
+
+    await attend_repo.update_attendance_student(**student_update.dict())
+                                                                   
 
 
 

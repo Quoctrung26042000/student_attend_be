@@ -40,6 +40,13 @@ class AttendanceRepository(BaseRepository):
                                                                 to_date=to_date)
         return attend_row
     
+    async def update_attendance_student(self, *, student_update):
+
+        attend_row = await queries.update_attendance_student(self.connection, student_update)
+    
+        return
+    
+    
 
 
     

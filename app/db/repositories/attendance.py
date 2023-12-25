@@ -26,10 +26,21 @@ class AttendanceRepository(BaseRepository):
 
 
         attend_row = await queries.search_statistic_detail(self.connection,
-                                                           class_id=class_id,
-                                                         from_date=from_date,
-                                                         to_date=to_date)
+                                                            class_id=class_id,
+                                                            from_date=from_date,
+                                                            to_date=to_date)
         return attend_row
+    
+    async def search_attend_student_detail(self,student_id,from_date, to_date):
+
+
+        attend_row = await queries.search_attend_student_detail(self.connection,
+                                                                student_id=student_id,
+                                                                from_date=from_date,
+                                                                to_date=to_date)
+        return attend_row
+    
+
 
     
     

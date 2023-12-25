@@ -97,8 +97,7 @@ async def attendance(
 
 
 @router.get(
-    "/attendance/student",
-    name="get:attendance",
+    "/attendance_student",
 )
 async def get_attend_student_detail(
     student_id:str = Query(..., description="Class id"),
@@ -113,10 +112,10 @@ async def get_attend_student_detail(
     # 
     id = int(student_id)
 
-    attend_infors =  await attend_repo.search_statistic_detail(class_id=id,
-                                                               from_date=from_date_parsed,
-                                                               to_date=to_date_parsed)
-    response = {'data': attend_infors}
+    attend_infors =  await attend_repo.search_attend_student_detail(student_id=id,
+                                                                    from_date=from_date_parsed,
+                                                                    to_date=to_date_parsed)
+    response = {'data': attend_infors, 'nameStudent':attend_infors[0]['nameStudent']}
     return response
 
 

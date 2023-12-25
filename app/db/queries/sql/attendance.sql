@@ -152,3 +152,23 @@ GROUP BY
     subquery.address
 
 
+--name: search_attend_student_detail
+
+SELECT 
+    a.note,
+    DATE(a.create_at) AS "day",
+    SUBSTRING(a.check_in::text, 12, 8) AS "timeCheckIn",
+    SUBSTRING(a.check_out::text, 12, 8) AS "timeCheckOut",
+    a.status,
+    s.name As "nameStudent"
+FROM 
+    attendance a
+JOIN 
+    student s ON a.student_id = s.id
+WHERE 
+    a.student_id = :student_id
+    AND DATE(a.create_at) >= :from_date
+	AND DATE(a.create_at) <= :to_date;
+
+
+

@@ -319,10 +319,18 @@ class AttendQueriesMixin:
     async def get_statistic(
         self, conn: Connection
     ) -> Record: ...
+    
 
     async def search_statistic_detail(
         self, conn: Connection,
         class_id,
+        from_date,
+        to_date
+    ) -> Record: ...
+
+    async def search_attend_student_detail(
+        self, conn: Connection,
+        student_id,
         from_date,
         to_date
     ) -> Record: ...

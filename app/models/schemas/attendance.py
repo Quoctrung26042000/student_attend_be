@@ -51,6 +51,8 @@ class AttendanceStatistics(BaseModel):
     
 class AttendanceStatisList(BaseModel):
     data: List
+    summary:dict
+
 
 
 class StatictInput(BaseModel):

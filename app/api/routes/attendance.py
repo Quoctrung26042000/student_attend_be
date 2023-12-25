@@ -64,13 +64,21 @@ async def search_statistic(
     from_date_parsed = datetime.strptime(from_date, "%d-%m-%Y").date()
     to_date_parsed = datetime.strptime(to_date, "%d-%m-%Y").date()
 
-    # Convert the parsed dates to the format "YYYY-MM-DD"
-    from_date_converted = from_date_parsed.strftime("%Y-%m-%d")
-    to_date_converted = to_date_parsed.strftime("%Y-%m-%d")
+
     attend_infors = await attend_repo.get_statistic_search(from_date=from_date_parsed,
                                                             to_date=to_date_parsed)
     
-    return AttendanceStatisList(data=attend_infors)
+    summary = {
+        'total_students':sum(record['quantity'] for record in attend_infors),
+        'total_classes':len(attend_infors),
+        'total_absence_with_permission':sum(record['absenceWithPermission'] for record in attend_infors),
+        'total_late':sum(record['late'] for record in attend_infors),
+        'total_present':sum(record['present'] for record in attend_infors),
+        'total_absence_without_permission':sum(record['absenceWithoutPermission'] for record in attend_infors),
+    }
+    
+    return AttendanceStatisList(data=attend_infors,
+                                summary=summary)
 
 
 @router.get(

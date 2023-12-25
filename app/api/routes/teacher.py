@@ -41,7 +41,7 @@ async def get_teachers(
         teacher = TeacherInResponse(
             id=item["id"],
             name=item["username"],
-            homeroomClassId=item["homeroom_class_id"],
+            classId=item["homeroom_class_id"],
             homeroomClass=item["class_name"],
             address=item["address"],
             phone=item["phone"]

@@ -31,6 +31,7 @@ class StudentInResponse(Base):
     classId: conint(ge=1)
     className:str
     dateOfBirth:date
+    gradeId:int
 
     # @classmethod
     # def from_create(cls, student_create: StudentInCreate):

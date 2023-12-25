@@ -37,7 +37,7 @@ class TeacherInCreate(Base):
 class TeacherInResponse(BaseModel):
     id: int
     name:str
-    homeroomClassId: Optional[int] 
+    classId: Optional[int] 
     homeroomClass: Optional[str]
     address: Optional[str] = None
     phone: str

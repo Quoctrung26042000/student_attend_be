@@ -38,6 +38,7 @@ async def get_all_class(class_repo: ClassRepository = Depends(get_repository(Cla
         data = ClassSelection(
             value=item["id"],
             label=item["className"],
+            gradeId=item["gradeId"]
 
         )
         data_object.append(data)

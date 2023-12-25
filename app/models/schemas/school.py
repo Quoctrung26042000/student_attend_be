@@ -33,6 +33,7 @@ class ClassInfoBase(BaseModel):
 class ClassSelection(BaseModel):
     value: int
     label:str
+    gradeId:int
 
 
 class ClassInfo(BaseModel):

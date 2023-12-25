@@ -33,7 +33,8 @@ SELECT
     s.gender,
     s.class_id AS "classId",
     s.date_of_birth AS "dateOfBirth",
-    c.class_name AS "className"
+    c.class_name AS "className",
+    c.grade_id AS "gradeId"
 FROM 
     student s 
 JOIN 

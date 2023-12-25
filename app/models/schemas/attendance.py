@@ -53,3 +53,8 @@ class AttendanceStatisList(BaseModel):
     data: List
 
 
+class StatictInput(BaseModel):
+    # grade_id: Optional[int]
+    class_id: Optional[int]
+    from_date: Optional[date]
+    to_date :Optional[date]

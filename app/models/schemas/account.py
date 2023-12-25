@@ -27,6 +27,7 @@ class AccountInUpdate(BaseModel):
 class AccountWithToken(Account):
     token: str
     teacher_name :Optional[str] = ""
+    classId:Optional[int] = None
 
 class AccountTeacher(Account):
     teacher_name: str

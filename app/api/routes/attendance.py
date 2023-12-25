@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from starlette import status
 from fastapi.responses import JSONResponse  
-
+from app.api.dependencies.authentication import get_current_user_authorizer
 
 from app.api.dependencies.database import get_repository
 from app.core.config import get_app_settings
@@ -14,9 +14,12 @@ from app.models.schemas.attendance import (
     AttendanceStatistics,
     AttendanceClassList,
     AttendanceStatisList,
+    AttendanceStatisListV2,
     StatictInput,
     StudentInUpdate
 )
+from app.db.repositories.account import Account
+from app.models.domain.users import User
 from app.resources import strings
 from app.services import jwt
 
@@ -47,10 +50,14 @@ async def get_atten(class_id:int,
     "/statistics",
 )
 async def get_statistic(
+    user: Account = Depends(get_current_user_authorizer()),
     attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
-) ->AttendanceStatisList :
+) ->AttendanceStatisListV2 :
+    
+    print("userrrrrrrrrrrrrrrrrrr",user)
     attend_infors =  await attend_repo.get_statistic()
-    return AttendanceStatisList(data=attend_infors)
+
+    return AttendanceStatisListV2(data=attend_infors)
 
 
 

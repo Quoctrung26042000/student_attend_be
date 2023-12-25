@@ -53,7 +53,8 @@ async def login(
             token=token,
             role = user.role,
             teacher_id = user.teacher_id,
-            teacher_name=user.teacher_name
+            teacher_name=user.teacher_name,
+            classId=user.classId
         ),
     )
 

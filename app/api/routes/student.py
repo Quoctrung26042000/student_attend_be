@@ -32,7 +32,6 @@ async def get_student(
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
 ) ->StudentList :
     all_student =  await student_repo.get_all_student()
-    print("all_sudent", all_student)
 
     data_object = []
     if all_student:

@@ -50,14 +50,16 @@ async def get_atten(class_id:int,
     "/statistics",
 )
 async def get_statistic(
-    user: Account = Depends(get_current_user_authorizer()),
+    current_teacher: Account = Depends(get_current_user_authorizer()),
     attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
 ) ->AttendanceStatisListV2 :
-    
-    print("userrrrrrrrrrrrrrrrrrr",user)
     attend_infors =  await attend_repo.get_statistic()
 
+    if current_teacher.role == 1:
+        attend_infors = [item for item in attend_infors if item['classId'] == current_teacher.classId]
+        
     return AttendanceStatisListV2(data=attend_infors)
+
 
 
 

@@ -17,17 +17,20 @@ LIMIT 1;
 
 
 -- name: get_account_by_username^
-SELECT id,
-       username,
-       email,
-       salt,
-       role,
-       hashed_password,
-       teacher_id,
-       created_at,
-       updated_at
-FROM account
-WHERE username = :username
+SELECT a.id,
+       a.username,
+       a.email,
+       a.salt,
+       a.hashed_password,
+       a.role,
+       a.teacher_id,
+       a.created_at,
+       a.updated_at,
+       t.username AS "teacherName",
+       t.homeroom_class_id As "classId"
+FROM account a
+LEFT JOIN teacher t ON a.teacher_id = t.id
+WHERE a.username = :username
 LIMIT 1;
 
 

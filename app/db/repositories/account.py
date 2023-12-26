@@ -13,13 +13,13 @@ class AccountRepository(BaseRepository):
             return AccounInforInDB(**user_row)
         raise EntityDoesNotExist("account with email {0} does not exist".format(email))
 
-    async def get_account_by_username(self, *, username: str) -> AccountInDB:
+    async def get_account_by_username(self, *, username: str) -> AccounInforInDB:
         user_row = await queries.get_account_by_username(
             self.connection,
             username=username,
         )
         if user_row:
-            return AccountInDB(**user_row)
+            return AccounInforInDB(**user_row)
 
         raise EntityDoesNotExist(
             "account with username {0} does not exist".format(username),

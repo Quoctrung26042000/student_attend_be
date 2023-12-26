@@ -24,8 +24,6 @@ WHERE
     AND DATE(create_at) >= CURRENT_DATE;
 
 
-
-
 -- name: get_statistic
 SELECT
     c.id AS "classId",
@@ -42,7 +40,7 @@ SELECT
     t.username AS "homeroomTeacher"
 FROM
     class c
-LEFT JOIN
+INNER JOIN
     (
         SELECT
             s.class_id,
@@ -59,10 +57,11 @@ LEFT JOIN
         GROUP BY
             s.class_id
     ) a ON c.id = a.class_id
-LEFT JOIN
+INNER JOIN
     teacher t ON c.id = t.homeroom_class_id
-LEFT JOIN
+INNER JOIN
     grades g ON c.grade_id = g.id;
+
 
 
 
@@ -82,7 +81,7 @@ SELECT
     t.username AS "homeroomTeacher"
 FROM
     class c
-LEFT JOIN
+INNER JOIN
     (
         SELECT
             s.class_id,
@@ -99,9 +98,9 @@ LEFT JOIN
         GROUP BY
             s.class_id
     ) a ON c.id = a.class_id
-LEFT JOIN
+INNER JOIN
     teacher t ON c.id = t.homeroom_class_id
-LEFT JOIN
+INNER JOIN
     grades g ON c.grade_id = g.id
 -- WHERE 
 --     c.grade_id = :grade_id AND c.id = :class_id;

@@ -15,10 +15,11 @@ from app.models.schemas.student import (
     StudentList,
     StudentInUpdate
 )
+from app.db.repositories.account import Account
 from app.resources import strings
 from app.services import jwt
 from app.services.student import check_student_is_taken, check_phone_is_taken
-
+from app.api.dependencies.authentication import get_current_user_authorizer
 from typing import Optional, List
 
 router = APIRouter()
@@ -30,8 +31,12 @@ router = APIRouter()
 )
 async def get_student(
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
+    current_teacher: Account = Depends(get_current_user_authorizer())
 ) ->StudentList :
     all_student =  await student_repo.get_all_student()
+
+    if current_teacher.role == 1:
+        all_student = [item for item in all_student if item['classId'] == current_teacher.classId]
 
     data_object = []
     if all_student:

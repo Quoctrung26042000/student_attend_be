@@ -26,7 +26,8 @@ class AccounInforInDB(IDModelMixin, DateTimeModelMixin, Account):
     salt: str = ""
     hashed_password: str = ""
     teacher_name : Optional[str] = None
-    classId:Optional[int] = None    
+    classId:Optional[int] = None   
+    className:Optional[str] = None
     def check_password(self, password: str) -> bool:
         return security.verify_password(self.salt + password, self.hashed_password)
 

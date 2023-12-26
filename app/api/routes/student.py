@@ -50,6 +50,7 @@ async def get_student(
     name="register:student",
 )
 async def register_student(
+    current_teacher: Account = Depends(get_current_user_authorizer()),
     student_create: StudentInUpdate = Body(...,),
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
 ) -> StudentRepository:
@@ -59,6 +60,9 @@ async def register_student(
     
     if await check_phone_is_taken(student_repo, phone=student_create.phone) == True:
         return JSONResponse({"errors":{"phone":strings.PHONE_EXITS}},400)
+    
+    if current_teacher.role == 1:
+        student_create.classId = current_teacher.classId
     
     student_created = await student_repo.create_student(**student_create.dict())
  

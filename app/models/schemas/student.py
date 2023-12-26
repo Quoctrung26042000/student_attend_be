@@ -17,7 +17,7 @@ class StudentInCreate(BaseInfor):
 
 class StudentInUpdate(BaseInfor):
     gender: GenderEnum
-    classId: conint(ge=1)
+    classId: Optional[conint(ge=0)] = None
 
     @validator("address")
     def address_must_not_be_empty(cls, v):

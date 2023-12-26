@@ -54,7 +54,8 @@ async def login(
             role = user.role,
             teacher_id = user.teacher_id,
             teacher_name=user.teacher_name,
-            classId=user.classId
+            classId=user.classId,
+            className=user.className
         ),
     )
 
@@ -90,6 +91,7 @@ async def register(
             role=user.role,
             token=token,
             teacher_id=user.teacher_id,
+            # className=user.className
         ),
     )
 

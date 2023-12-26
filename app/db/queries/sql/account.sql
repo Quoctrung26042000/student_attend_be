@@ -9,9 +9,11 @@ SELECT a.id,
        a.created_at,
        a.updated_at,
        t.username AS "teacherName",
-       t.homeroom_class_id As "classId"
+       t.homeroom_class_id As "classId",
+       c.class_name as "className"
 FROM account a
 LEFT JOIN teacher t ON a.teacher_id = t.id
+LEFT JOIN class c on t.homeroom_class_id = c.id
 WHERE a.email = :email
 LIMIT 1;
 
@@ -27,9 +29,11 @@ SELECT a.id,
        a.created_at,
        a.updated_at,
        t.username AS "teacherName",
-       t.homeroom_class_id As "classId"
+       t.homeroom_class_id As "classId",
+       c.class_name as "className"
 FROM account a
 LEFT JOIN teacher t ON a.teacher_id = t.id
+LEFT JOIN class c On t.homeroom_class_id = c.id
 WHERE a.username = :username
 LIMIT 1;
 

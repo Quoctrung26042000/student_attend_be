@@ -17,6 +17,7 @@ class AttendanceClass(BaseModel):
     note: Optional[str] = None
     timeCheckIn: Optional[str] = None
     timeCheckOut: Optional[str] = None
+    className : Optional[str] = None
 
     @validator("status")
     def status_is_valid(cls, v):

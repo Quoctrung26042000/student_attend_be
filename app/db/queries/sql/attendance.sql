@@ -8,12 +8,13 @@ FROM (
         a.check_out AS "timeCheckOut",
         a.status,
         a.note,
-        a.create_at,
+        a.create_at ,
         s.name,
         s.phone,
         s.date_of_birth AS student_dob,
         s.gender AS student_gender,
         s.class_id,
+        c.class_name As "className",
         c.grade_id
     FROM attendance a
     JOIN student s ON a.student_id = s.id
@@ -78,7 +79,8 @@ SELECT
     COALESCE(a.late_count, 0) AS late,
     COALESCE(a.excused_absence_count, 0) AS "absenceWithPermission",
     t.id AS teacherId,
-    t.username AS "homeroomTeacher"
+    t.username AS "homeroomTeacher",
+    t.homeroom_class_id As "classId"
 FROM
     class c
 INNER JOIN
@@ -115,6 +117,7 @@ SELECT
     subquery.class_id,
     subquery.grade_id,
     subquery.address,
+    subquery.class_name AS "className",
     COUNT(CASE WHEN subquery.status = 1 THEN 1 END) AS present_count,
     COUNT(CASE WHEN subquery.status = 2 THEN 1 END) AS "absenceWithoutPermission",
     COUNT(CASE WHEN subquery.status = 3 THEN 1 END) AS late,
@@ -131,6 +134,7 @@ FROM (
         s.gender ,
         s.class_id,
         s.address,
+        c.class_name,
         c.grade_id
     FROM attendance a
     JOIN student s ON a.student_id = s.id
@@ -148,7 +152,8 @@ GROUP BY
     subquery.gender,
     subquery.class_id,
     subquery.grade_id,
-    subquery.address
+    subquery.address,
+    subquery.class_name
 
 
 --name: search_attend_student_detail

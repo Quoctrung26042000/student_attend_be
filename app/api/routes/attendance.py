@@ -38,7 +38,6 @@ async def get_atten(class_id:int,
     attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
 ) ->AttendanceClass :
     attend_infors =  await attend_repo.get_attend_infors(class_id=class_id)
-    print("attenaaaaaaaaaaa", attend_infors)
     data_object = []
     if attend_infors:
         data_object = [AttendanceClass(**item) for item in attend_infors]
@@ -65,6 +64,7 @@ async def get_statistic(
 
 @router.get("/search_statistic")
 async def search_statistic(
+    current_teacher: Account = Depends(get_current_user_authorizer()),
     from_date: str = Query(..., description="Start date"),
     to_date: str = Query(..., description="End date"),
     attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
@@ -77,6 +77,10 @@ async def search_statistic(
     attend_infors = await attend_repo.get_statistic_search(from_date=from_date_parsed,
                                                             to_date=to_date_parsed)
     
+    if current_teacher.role == 1:
+        attend_infors = [item for item in attend_infors if item['classId'] == current_teacher.classId]
+        
+    
     summary = {
         'total_students':sum(record['quantity'] for record in attend_infors),
         'total_classes':len(attend_infors),
@@ -85,6 +89,9 @@ async def search_statistic(
         'total_present':sum(record['present'] for record in attend_infors),
         'total_absence_without_permission':sum(record['absenceWithoutPermission'] for record in attend_infors),
     }
+
+    if current_teacher.role == 1:
+        summary['total_classes'] = attend_infors[0]['className']
     
     return AttendanceStatisList(data=attend_infors,
                                 summary=summary)

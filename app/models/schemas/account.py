@@ -28,6 +28,7 @@ class AccountWithToken(Account):
     token: str
     teacher_name :Optional[str] = ""
     classId:Optional[int] = None
+    className:Optional[str]= None
 
 class AccountTeacher(Account):
     teacher_name: str

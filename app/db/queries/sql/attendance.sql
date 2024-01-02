@@ -118,9 +118,9 @@ SELECT
     subquery.grade_id,
     subquery.address,
     subquery.class_name AS "className",
-    COUNT(CASE WHEN subquery.status = 1 THEN 1 END) AS present_count,
+    COUNT(CASE WHEN subquery.status = 1 THEN 1 END) AS "present",
     COUNT(CASE WHEN subquery.status = 2 THEN 1 END) AS "absenceWithoutPermission",
-    COUNT(CASE WHEN subquery.status = 3 THEN 1 END) AS late,
+    COUNT(CASE WHEN subquery.status = 3 THEN 1 END) AS "late",
     COUNT(CASE WHEN subquery.status = 4 THEN 1 END) AS "absenceWithPermission"
 FROM (
     SELECT 

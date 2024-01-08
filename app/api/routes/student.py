@@ -26,23 +26,22 @@ router = APIRouter()
 
 @router.get(
     "/student",
-    response_model=StudentList,
     name="get:student",
 )
 async def get_student(
     student_repo: StudentRepository = Depends(get_repository(StudentRepository)),
     current_teacher: Account = Depends(get_current_user_authorizer())
-) ->StudentList :
+) :
     all_student =  await student_repo.get_all_student()
 
-    if current_teacher.role == 1:
+    if current_teacher.role == 2:
         all_student = [item for item in all_student if item['classId'] == current_teacher.classId]
 
     data_object = []
-    if all_student:
-        data_object = [StudentInResponse(**item) for item in all_student]
+    # if all_student:
+    #     data_object = [StudentInResponse(**item) for item in all_student]
 
-    return StudentList(data=data_object)
+    return {'data': all_student}
 
 @router.post(
     "/student",
@@ -61,7 +60,7 @@ async def register_student(
     if await check_phone_is_taken(student_repo, phone=student_create.phone) == True:
         return JSONResponse({"errors":{"phone":strings.PHONE_EXITS}},400)
     
-    if current_teacher.role == 1:
+    if current_teacher.role == 2:
         student_create.classId = current_teacher.classId
     
     student_created = await student_repo.create_student(**student_create.dict())

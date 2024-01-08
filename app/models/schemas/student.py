@@ -30,18 +30,19 @@ class StudentInResponse(Base):
     gender: GenderEnum
     classId: conint(ge=1)
     className:str
-    dateOfBirth:date
+    dateOfBirth:str
     gradeId:int
 
-    # @classmethod
-    # def from_create(cls, student_create: StudentInCreate):
-    #     parsed_date = datetime.strptime(student_create.dateOfBirth, '%Y-%m-%d')
-    #     formatted_date = parsed_date.strftime('%d-%m-%Y')
-    #     return cls(
-    #         gender='male' if student_create.gender == GenderEnum.male else 'female',
-    #         classId=student_create.classId,
-    #         dateOfBirth=formatted_date
-    #     )
+    @validator("dateOfBirth", pre=True)
+    def parse_birthdate(cls, value):
+        if not value:
+            raise ValueError("Date of birth must not be empty")
+        
+        if isinstance(value, date):
+            return value.strftime('%d/%m/%Y')  # If it's already a date object, no need to parse
+
+        # Parse the date if it's a string in the 'D/M/Y' format
+        return datetime.strptime(value, "%d/%m/%Y").date()
 
 class StudentList(BaseModel):
     data : List[StudentInResponse]

@@ -57,3 +57,26 @@ SET username        = :new_username,
 WHERE username = :username
 RETURNING
     updated_at;
+
+
+--name : teacher_unassigned_account
+SELECT id, username
+FROM teacher 
+WHERE id NOT IN (
+    SELECT t.id
+    FROM teacher AS t
+    JOIN account AS a ON t.id = a.teacher_id
+)
+
+
+--name : get_accounts
+SELECT 
+a.id,
+a.username as "userName",
+a.email,
+a.role,
+a.teacher_id as "teacherId",
+t.username as "nameTeacher"
+FROM account as a 
+LEFT JOIN teacher as t on t.id = a.teacher_id
+

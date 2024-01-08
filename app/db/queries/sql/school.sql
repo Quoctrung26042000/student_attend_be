@@ -48,3 +48,21 @@ where id = :class_id ;
 UPDATE teacher
 SET homeroom_class_id = NULL 
 WHERE homeroom_class_id = :class_id;
+
+-- name: get_teacher_by_class_id<!
+SELECT *
+FROM teacher
+WHERE homeroom_class_id = :class_id;
+
+-- name: update_class_by_id<!
+UPDATE class 
+SET 
+class_name = :class_name,
+grade_id = :grade_id
+WHERE
+id = :class_id
+
+-- name: get_class_by_id<!
+SELECT *
+FROM class
+WHERE id = :class_id;

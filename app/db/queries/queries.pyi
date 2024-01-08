@@ -111,6 +111,23 @@ class SchoolQueriesMixin:
         self, conn: Connection, *, class_id: int
     ) -> Record: ...
 
+    async def get_teacher_by_class_id(
+        self, conn: Connection, *, class_id: int
+    ) -> Record: ...
+
+    async def get_class_by_id(
+        self, conn: Connection, *, class_id: int
+    ) -> Record: ...
+
+    async def update_class_by_id(
+        self, conn: Connection,
+        *,
+        class_id: int,
+        class_name:str,
+        grade_id:int
+    ) -> Record: ...
+    
+
 class AccountQueriesMixin:
     async def get_account_by_email(self, conn: Connection, *, email: str) -> Record: ...
     async def get_account_by_username(
@@ -142,6 +159,20 @@ class AccountQueriesMixin:
         new_bio: Optional[str],
         new_image: Optional[str]
     ) -> Record: ...
+
+    async def teacher_unassigned_account(
+        self,
+        conn: Connection,
+    ) -> Record: ...
+
+    async def get_accounts(
+        self,
+        conn: Connection,
+    ) -> Record: ...
+
+    
+
+    
 
 
 
@@ -341,6 +372,20 @@ class AttendQueriesMixin:
         status,
         note,
     ) -> Record: ...
+
+    async def approve_all_by_id(
+        self, conn: Connection,
+        ids,
+        status,
+        note,
+    ) -> Record: ...
+
+    async def get_students_by_class_id(
+        self, conn: Connection,
+        class_id,
+    ) -> Record: ...
+    
+    
 
     async def get_statistic_search(self, conn: Connection,from_date,to_date)-> Record: ...
 

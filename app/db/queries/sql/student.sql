@@ -32,7 +32,7 @@ SELECT
     s.address,
     s.gender,
     s.class_id AS "classId",
-    s.date_of_birth AS "dateOfBirth",
+    TO_CHAR(s.date_of_birth, 'DD/MM/YYYY') AS "dateOfBirth",
     c.class_name AS "className",
     c.grade_id AS "gradeId"
 FROM 

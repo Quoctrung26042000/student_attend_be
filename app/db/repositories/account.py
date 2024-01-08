@@ -48,6 +48,21 @@ class AccountRepository(BaseRepository):
             )
 
         return account.copy(update=dict(account_row))
+    
+    async def teacher_unassigned_account(
+        self,
+    ):
+        async with self.connection.transaction():
+            teacher_row = await queries.teacher_unassigned_account(
+                self.connection)
+        return teacher_row
+    
+    async def get_accounts(self):
+        async with self.connection.transaction():
+            accounts_row = await queries.get_accounts(
+                self.connection)
+        return accounts_row
+    
 
     # async def update_user(  # noqa: WPS211
     #     self,

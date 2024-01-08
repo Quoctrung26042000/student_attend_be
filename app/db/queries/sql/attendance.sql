@@ -182,4 +182,19 @@ id = :attendance_id
 RETURNING id, create_at, update_at;
 
 
+--name: get_students_by_class_id
+SELECT 
+id
+FROM
+student
+where class_id = :class_id
+
+
+--name: approve_all_by_id
+UPDATE 
+attendance
+SET status = :status,
+    note = :note
+WHERE student_id = ANY(:ids)
+
 

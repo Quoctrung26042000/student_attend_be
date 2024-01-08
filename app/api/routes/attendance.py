@@ -16,7 +16,8 @@ from app.models.schemas.attendance import (
     AttendanceStatisList,
     AttendanceStatisListV2,
     StatictInput,
-    StudentInUpdate
+    StudentInUpdate,
+    AttendanceAproveAll
 )
 from app.db.repositories.account import Account
 from app.models.domain.users import User
@@ -54,7 +55,7 @@ async def get_statistic(
 ) ->AttendanceStatisListV2 :
     attend_infors =  await attend_repo.get_statistic()
 
-    if current_teacher.role == 1:
+    if current_teacher.role == 2:
         attend_infors = [item for item in attend_infors if item['classId'] == current_teacher.classId]
         
     return AttendanceStatisListV2(data=attend_infors)
@@ -77,7 +78,7 @@ async def search_statistic(
     attend_infors = await attend_repo.get_statistic_search(from_date=from_date_parsed,
                                                             to_date=to_date_parsed)
     
-    if current_teacher.role == 1:
+    if current_teacher.role == 2:
         attend_infors = [item for item in attend_infors if item['classId'] == current_teacher.classId]
         
     
@@ -90,7 +91,7 @@ async def search_statistic(
         'total_absence_without_permission':sum(record['absenceWithoutPermission'] for record in attend_infors),
     }
 
-    if current_teacher.role == 1:
+    if current_teacher.role == 2:
         summary['total_classes'] = attend_infors[0]['className']
     
     return AttendanceStatisList(data=attend_infors,
@@ -159,6 +160,27 @@ async def update_attendance_student(
     
     return update_row
 
+
+
+
+
+@router.post(
+    "/approve_all/{class_id}",
+)
+async def approve_all(
+    class_id: int,
+    attend_approve:AttendanceAproveAll = Body(),
+    attend_repo: AttendanceRepository = Depends(get_repository(AttendanceRepository)),
+):
+    id = int(class_id)
+
+    student_ids = await attend_repo.get_students_by_class_id(class_id=id)
+
+    await attend_repo.approve_all_by_id(ids=student_ids, data_object=attend_approve)
+
+    return {
+        class_id:id
+    }
                                                                    
 
 

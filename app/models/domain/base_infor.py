@@ -29,6 +29,6 @@ class BaseInfor(Base):
         if not value:
             raise ValueError("Date of birth must not be empty")
         if isinstance(value, str):
-            return datetime.strptime(value, "%Y-%m-%d").date()
+            return datetime.strptime(value, "%d-%m-%Y").date()
         return value
 

@@ -57,8 +57,6 @@ class AttendanceStatisList(BaseModel):
 class AttendanceStatisListV2(BaseModel):
     data: List
 
-
-
 class StatictInput(BaseModel):
     # grade_id: Optional[int]
     class_id: Optional[int]
@@ -68,3 +66,8 @@ class StatictInput(BaseModel):
 class StudentInUpdate(BaseModel):
     status:int
     note:Optional[str] = ""
+
+class AttendanceAproveAll(BaseModel):
+    status: Optional[StatusEnum] = 2
+    note: Optional[str] = None
+    

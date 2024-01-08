@@ -61,3 +61,7 @@ class ClassRepositoryCreate(BaseModel):
     class_name:str
     grade_id:int
     teacher_id:int
+
+
+class ClassInUpdate(ClassInCreate):
+    pass

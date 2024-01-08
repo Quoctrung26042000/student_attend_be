@@ -49,6 +49,21 @@ class AttendanceRepository(BaseRepository):
                                                               note=student_update.note)
         return attend_row
     
+    async def approve_all_by_id(self, *, ids, data_object):
+
+        attend_row = await queries.approve_all_by_id(self.connection,
+                                                              ids=ids,
+                                                              status=data_object.status,
+                                                              note=data_object.note)
+        return attend_row
+    
+
+    async def get_students_by_class_id(self, *, class_id):
+
+        ids = await queries.get_students_by_class_id(self.connection,
+                                                     class_id=class_id)
+        return ids
+    
     
 
 

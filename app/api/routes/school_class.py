@@ -14,7 +14,8 @@ from app.models.schemas.school import (
     ClassDel,
     ClassRepositoryCreate,
     ClassSelection,
-    ClassListSelection
+    ClassListSelection,
+    ClassInUpdate
 )
 from app.resources import strings
 from app.services import jwt
@@ -108,6 +109,38 @@ async def delete_class_id(class_id:int,
     
     await class_repo.update_teacher_is_null(class_id=class_id)
     await class_repo.delete_class_id(class_id=class_id)
+
+    return ClassDel(
+        id=class_id
+    )
+
+
+@router.patch(
+    "/class/{class_id}",
+)
+async def update_class(class_id:int,
+                    class_update: ClassInUpdate = Body(...),
+                    class_repo: ClassRepository = Depends(get_repository(ClassRepository)),
+                    teacher_repo: TeacherRepository = Depends(get_repository(TeacherRepository))):
+    
+
+    teacher = await class_repo.get_teacher_by_class_id(class_id=class_id)
+
+    class_current = await class_repo.get_class_by_id(class_id=class_id)
+
+    if class_update.teacher_id != teacher['homeroom_class_id']:
+        # Update new teacher for class 
+        await class_repo.update_teacher_is_null(class_id=class_id)
+        await teacher_repo.update_class_id(teacher_id=class_update.teacher_id,class_id=class_id)
+  
+    if class_current['class_name'] != class_update.class_name:
+        if (await check_class_is_taken(class_repo, class_update.class_name)):
+            return JSONResponse({"errors":{"className":strings.CLASS_TAKEN}},400)
+
+    
+    await class_repo.update_class_by_id(class_id=class_id,
+                                        class_name=class_update.class_name,
+                                        grade_id=class_update.grade_id)
 
     return ClassDel(
         id=class_id

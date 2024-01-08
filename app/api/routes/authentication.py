@@ -70,7 +70,7 @@ async def register(
     # user: Account = Depends(get_current_user_authorizer()),
     settings: AppSettings = Depends(get_app_settings),
 ) -> AccountInResponse:
-    # if user.role == 1 :
+    # if user.role == 2 :
     #     return JSONResponse({"error":strings.PER_DENIED},400)
 
     if await check_account_is_taken(users_repo, user_create.username):
@@ -115,7 +115,33 @@ async def protected_route(token: str,
                 ),
                 )
     except Exception as e :
-        return JSONResponse({"error":strings.VERIFY_TOKEN},400)
+        return JSONResponse({"errors":strings.VERIFY_TOKEN},400)
+    
+
+@router.get("/account/teacher_unassigned")
+async def teacher_unassigned(users_repo: AccountRepository = Depends(get_repository(AccountRepository))):
+    try :
+        data_object = []
+        teacher_unassigned_account = await users_repo.teacher_unassigned_account()
+
+        for item in teacher_unassigned_account :
+            data_object.append({
+                'label':item['id'],
+                'name':item['username'],
+            })
+        return JSONResponse({"data":data_object},200)
+    except Exception as e :
+        return JSONResponse({"errors":strings.VERIFY_TOKEN},400)
+    
+
+@router.get("/account")
+async def get_account(users_repo: AccountRepository = Depends(get_repository(AccountRepository))):
+    accounts = await users_repo.get_accounts()
+
+    return {
+        'data': accounts
+    }
+ 
 
 
 

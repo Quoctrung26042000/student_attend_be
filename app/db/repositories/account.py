@@ -28,13 +28,13 @@ class AccountRepository(BaseRepository):
     async def create_account(
         self,
         *,
-        username: str,
+        user_name: str,
         email: str,
         password: str,
         role :int,
         teacher_id:int
     ) -> AccountInDB:
-        account = AccountInDB(username=username, email=email, role=role, teacher_id=teacher_id)
+        account = AccountInDB(username=user_name, email=email, role=role, teacher_id=teacher_id)
         account.change_password(password)
         async with self.connection.transaction():
             account_row = await queries.create_new_account(

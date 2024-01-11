@@ -8,7 +8,6 @@ from app.db.repositories.base import BaseRepository
 class AttendanceRepository(BaseRepository):
     async def get_attend_infors(self, *, class_id: int) :
         attend_row = await queries.get_attend_infors(self.connection, class_id=class_id)
-        print("aaaaaaaaaaaaaa",attend_row)
         return attend_row
     
     async def get_statistic(self) :

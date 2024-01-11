@@ -313,6 +313,18 @@ class StudentQueriesMixin:
         class_id: int,
     ) -> Record: ...
 
+    async def insert_new_student_in_attendance(
+        self,
+        conn: Connection,
+        student_id: int,
+    ) -> Record: ...
+
+    async def delete_student_in_attendance(
+        self,
+        conn: Connection,
+        student_id: int,
+    ) -> Record: ...
+    
     async def get_student_by_name(
         self,
         conn: Connection,

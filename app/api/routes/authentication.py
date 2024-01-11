@@ -70,12 +70,13 @@ async def register(
     # user: Account = Depends(get_current_user_authorizer()),
     settings: AppSettings = Depends(get_app_settings),
 ) -> AccountInResponse:
-    # if user.role == 2 :
+    # if user.role == 1 :
     #     return JSONResponse({"error":strings.PER_DENIED},400)
-
-    if await check_account_is_taken(users_repo, user_create.username):
-        return JSONResponse({"error":strings.USERNAME_TAKEN},400)
-
+    user_create.user_name = user_create.email.split("@")[0]
+    print(user_create)
+    # if await check_account_is_taken(users_repo, user_create.username):
+    #     return JSONResponse({"error":strings.USERNAME_TAKEN},400)
+    # user_create.username = user_create.email.split("@")[0]
     if await check_email_account_is_taken(users_repo, user_create.email):
         return JSONResponse({"error":strings.EMAIL_TAKEN},400)
     
@@ -118,7 +119,7 @@ async def protected_route(token: str,
         return JSONResponse({"errors":strings.VERIFY_TOKEN},400)
     
 
-@router.get("/account/teacher_unassigned")
+@router.get("/school/account/teacher_unassigned")
 async def teacher_unassigned(users_repo: AccountRepository = Depends(get_repository(AccountRepository))):
     try :
         data_object = []
@@ -126,8 +127,8 @@ async def teacher_unassigned(users_repo: AccountRepository = Depends(get_reposit
 
         for item in teacher_unassigned_account :
             data_object.append({
-                'label':item['id'],
-                'name':item['username'],
+                'value':item['id'],
+                'label':item['username'],
             })
         return JSONResponse({"data":data_object},200)
     except Exception as e :

@@ -72,8 +72,8 @@ WHERE id NOT IN (
 --name : get_accounts
 SELECT 
 a.id,
-a.username as "userName",
-a.email,
+-- a.username as "userName",
+a.email as "email",
 a.role,
 a.teacher_id as "teacherId",
 t.username as "nameTeacher"

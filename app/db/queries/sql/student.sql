@@ -56,3 +56,16 @@ FROM student where phone= :phone;
 DELETE FROM student where id= :id
 RETURNING
     id, class_id
+
+
+-- name : insert_new_student_in_attendance
+INSERT INTO attendance (student_id, status) VALUES (:student_id, 2);
+
+--name : delete_student_in_attendance
+DELETE 
+FROM attendance 
+WHERE
+student_id = :student_id
+
+
+

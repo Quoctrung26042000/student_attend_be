@@ -11,7 +11,7 @@ class AccountInLogin(RWSchema):
     password: constr(max_length=10)
 
 class AccountInCreate(AccountInLogin):
-    username: str
+    user_name: str
     role : int
     teacher_id : int
 

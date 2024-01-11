@@ -22,7 +22,11 @@ class StudentRepository(BaseRepository):
     async def delete_student_by_id(self, *, id: int) :
         async with self.connection.transaction():
             student_row = await queries.delete_student_by_id(self.connection, id=id)
+            
             await queries.update_quantity(self.connection,variable=-1,class_id=student_row["class_id"])
+
+            await queries.delete_student_in_attendance(self.connection, student_id=id)
+
         return student_row
     
     async def get_all_student(self) :
@@ -44,7 +48,7 @@ class StudentRepository(BaseRepository):
                             gender=gender, dateOfBirth=dateOfBirth,
                             classId=classId)
         async with self.connection.transaction():
-            await queries.create_new_student(
+            student_id = await queries.create_new_student(
                 self.connection,
                 name=student.name,
                 phone=student.phone,
@@ -54,6 +58,9 @@ class StudentRepository(BaseRepository):
                 class_id=student.classId
             )
             await queries.update_quantity(self.connection,variable=1,class_id=classId)
+
+            await queries.insert_new_student_in_attendance(self.connection, student_id=student_id)
+
         return student
     
     async def student_update(self, *,

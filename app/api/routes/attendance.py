@@ -55,7 +55,7 @@ async def get_statistic(
 ) ->AttendanceStatisListV2 :
     attend_infors =  await attend_repo.get_statistic()
 
-    if current_teacher.role == 2:
+    if current_teacher.role == 1:
         attend_infors = [item for item in attend_infors if item['classId'] == current_teacher.classId]
         
     return AttendanceStatisListV2(data=attend_infors)
@@ -75,24 +75,27 @@ async def search_statistic(
     to_date_parsed = datetime.strptime(to_date, "%d-%m-%Y").date()
 
 
+    attend_infors =  []
+
     attend_infors = await attend_repo.get_statistic_search(from_date=from_date_parsed,
                                                             to_date=to_date_parsed)
     
-    if current_teacher.role == 2:
+    if current_teacher.role == 1:
         attend_infors = [item for item in attend_infors if item['classId'] == current_teacher.classId]
         
     
     summary = {
-        'total_students':sum(record['quantity'] for record in attend_infors),
-        'total_classes':len(attend_infors),
-        'total_absence_with_permission':sum(record['absenceWithPermission'] for record in attend_infors),
-        'total_late':sum(record['late'] for record in attend_infors),
-        'total_present':sum(record['present'] for record in attend_infors),
-        'total_absence_without_permission':sum(record['absenceWithoutPermission'] for record in attend_infors),
+        'total_students':sum(record['quantity'] for record in attend_infors) or 0,
+        'total_classes':len(attend_infors) or 0,
+        'total_absence_with_permission':sum(record['absenceWithPermission'] for record in attend_infors) or 0,
+        'total_late':sum(record['late'] for record in attend_infors) or 0,
+        'total_present':sum(record['present'] for record in attend_infors) or 0,
+        'total_absence_without_permission':sum(record['absenceWithoutPermission'] for record in attend_infors) or 0,
     }
 
-    if current_teacher.role == 2:
-        summary['total_classes'] = attend_infors[0]['className']
+    if current_teacher.role == 1:
+            summary['total_classes'] = attend_infors[0]['className'] if attend_infors else strings.TEACHER_UNASSIGNED
+
     
     return AttendanceStatisList(data=attend_infors,
                                 summary=summary)
@@ -137,11 +140,20 @@ async def get_attend_student_detail(
 
     # 
     id = int(student_id)
+    attend_infors = []
+    response = {'data': attend_infors, 'nameStudent': ''} 
+
 
     attend_infors =  await attend_repo.search_attend_student_detail(student_id=id,
                                                                     from_date=from_date_parsed,
                                                                     to_date=to_date_parsed)
-    response = {'data': attend_infors, 'nameStudent':attend_infors[0]['nameStudent']}
+    
+    print("attend_infors", attend_infors)
+
+    if attend_infors:
+        response['data'] = attend_infors
+        response['nameStudent'] = attend_infors[0]['nameStudent']
+
     return response
 
 

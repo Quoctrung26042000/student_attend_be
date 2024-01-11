@@ -1,6 +1,7 @@
 # API messages
 PER_DENIED="Không có quyền truy cập"
 SEVER_ERROR = "Lỗi Máy chủ"
+TEACHER_UNASSIGNED = "Chưa có lớp chủ nhiệm"
 
 TEACHER_EXITS = "Giáo viên đã tồn tại"
 TEACHER_DO_NOT_EXITS="Giáo viên không tồn tại"

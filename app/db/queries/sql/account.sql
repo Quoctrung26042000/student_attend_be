@@ -21,6 +21,29 @@ WHERE
 LIMIT
     1;
 
+-- name: get_account_by_id^
+SELECT
+    a.id,
+    a.username,
+    a.email,
+    a.salt,
+    a.hashed_password,
+    a.role,
+    a.teacher_id,
+    a.created_at,
+    a.updated_at,
+    t.username AS "teacherName",
+    t.homeroom_class_id As "classId",
+    c.class_name as "className"
+FROM
+    account a
+    LEFT JOIN teacher t ON a.teacher_id = t.id
+    LEFT JOIN class c on t.homeroom_class_id = c.id
+WHERE
+    a.id = :id
+LIMIT
+    1;
+
 -- name: get_account_by_username^
 SELECT
     a.id,
@@ -110,3 +133,14 @@ DELETE FROM
     account
 WHERE
     id = :id RETURNING id;
+
+--name : update_account_by_id
+UPDATE
+    account
+SET
+    username = :new_username,
+    email = :new_email,
+    salt = :new_salt,
+    hashed_password = :new_hash_password
+WHERE
+    id = :account_id RETURNING id;

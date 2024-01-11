@@ -120,6 +120,7 @@ class AccountQueriesMixin:
 
 class UsersQueriesMixin:
     async def get_user_by_email(self, conn: Connection, *, email: str) -> Record: ...
+    async def get_account_by_id(self, conn: Connection, id: int) -> Record: ...
     async def get_user_by_username(
         self, conn: Connection, *, username: str
     ) -> Record: ...
@@ -143,6 +144,16 @@ class UsersQueriesMixin:
         new_password: str,
         new_bio: Optional[str],
         new_image: Optional[str],
+    ) -> Record: ...
+    async def update_account_by_id(
+        self,
+        conn: Connection,
+        *,
+        account_id: int,
+        new_username: str,
+        new_email: str,
+        new_salt: str,
+        new_hash_password: str,
     ) -> Record: ...
 
 class ProfilesQueriesMixin:

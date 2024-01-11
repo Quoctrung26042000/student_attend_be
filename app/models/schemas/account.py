@@ -16,11 +16,15 @@ class AccountInCreate(AccountInLogin):
     role: int
     teacher_id: int
 
+    def extract_name_from_email(self, email: EmailStr) -> str:
+        self.user_name = email.split("@")[0]
+
 
 class AccountInUpdate(BaseModel):
     email: EmailStr
     password: Optional[str] = None
     role: Optional[int] = 1
+    user_name: Optional[str] = ""
 
 
 class AccountWithToken(Account):

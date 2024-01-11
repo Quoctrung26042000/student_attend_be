@@ -8,13 +8,14 @@ from app.services import security
 class Account(RWModel):
     username: str
     email: str
-    role : int
+    role: int
     teacher_id: Optional[int]
 
 
 class AccountInDB(IDModelMixin, DateTimeModelMixin, Account):
     salt: str = ""
     hashed_password: str = ""
+
     def check_password(self, password: str) -> bool:
         return security.verify_password(self.salt + password, self.hashed_password)
 
@@ -22,12 +23,14 @@ class AccountInDB(IDModelMixin, DateTimeModelMixin, Account):
         self.salt = security.generate_salt()
         self.hashed_password = security.get_password_hash(self.salt + password)
 
+
 class AccounInforInDB(IDModelMixin, DateTimeModelMixin, Account):
     salt: str = ""
     hashed_password: str = ""
-    teacher_name : Optional[str] = None
-    classId:Optional[int] = None   
-    className:Optional[str] = None
+    teacher_name: Optional[str] = None
+    classId: Optional[int] = None
+    className: Optional[str] = None
+
     def check_password(self, password: str) -> bool:
         return security.verify_password(self.salt + password, self.hashed_password)
 

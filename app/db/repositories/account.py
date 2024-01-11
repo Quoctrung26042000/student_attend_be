@@ -26,15 +26,11 @@ class AccountRepository(BaseRepository):
         )
 
     async def create_account(
-        self,
-        *,
-        user_name: str,
-        email: str,
-        password: str,
-        role :int,
-        teacher_id:int
+        self, *, user_name: str, email: str, password: str, role: int, teacher_id: int
     ) -> AccountInDB:
-        account = AccountInDB(username=user_name, email=email, role=role, teacher_id=teacher_id)
+        account = AccountInDB(
+            username=user_name, email=email, role=role, teacher_id=teacher_id
+        )
         account.change_password(password)
         async with self.connection.transaction():
             account_row = await queries.create_new_account(
@@ -44,55 +40,34 @@ class AccountRepository(BaseRepository):
                 salt=account.salt,
                 hashed_password=account.hashed_password,
                 role=account.role,
-                teacher_id=account.teacher_id
+                teacher_id=account.teacher_id,
             )
 
         return account.copy(update=dict(account_row))
-    
+
     async def teacher_unassigned_account(
         self,
     ):
         async with self.connection.transaction():
-            teacher_row = await queries.teacher_unassigned_account(
-                self.connection)
+            teacher_row = await queries.teacher_unassigned_account(self.connection)
         return teacher_row
-    
+
     async def get_accounts(self):
         async with self.connection.transaction():
-            accounts_row = await queries.get_accounts(
-                self.connection)
+            accounts_row = await queries.get_accounts(self.connection)
         return accounts_row
-    
 
-    # async def update_user(  # noqa: WPS211
-    #     self,
-    #     *,
-    #     user: User,
-    #     username: Optional[str] = None,
-    #     email: Optional[str] = None,
-    #     password: Optional[str] = None,
-    #     bio: Optional[str] = None,
-    #     image: Optional[str] = None,
-    # ) -> UserInDB:
-    #     user_in_db = await self.get_user_by_username(username=user.username)
+    async def delete_account_by_id(self, id):
+        async with self.connection.transaction():
+            accounts_id = await queries.delete_account_by_id(self.connection, id)
+        return accounts_id
 
-    #     user_in_db.username = username or user_in_db.username
-    #     user_in_db.email = email or user_in_db.email
-    #     user_in_db.bio = bio or user_in_db.bio
-    #     user_in_db.image = image or user_in_db.image
-    #     if password:
-    #         user_in_db.change_password(password)
-
-    #     async with self.connection.transaction():
-    #         user_in_db.updated_at = await queries.update_user_by_username(
-    #             self.connection,
-    #             username=user.username,
-    #             new_username=user_in_db.username,
-    #             new_email=user_in_db.email,
-    #             new_salt=user_in_db.salt,
-    #             new_password=user_in_db.hashed_password,
-    #             new_bio=user_in_db.bio,
-    #             new_image=user_in_db.image,
-    #         )
-
-    #     return user_in_db
+    async def update_account_by_id(
+        self, *, user_name: str, email: str, password: str, role: int, teacher_id: int
+    ):
+        account = AccountInDB(
+            username=user_name, email=email, role=role, teacher_id=teacher_id
+        )
+        async with self.connection.transaction():
+            accounts_id = await queries.delete_account_by_id(self.connection, id)
+        return accounts_id

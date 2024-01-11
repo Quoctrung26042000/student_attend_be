@@ -10,28 +10,29 @@ class AccountInLogin(RWSchema):
     email: Optional[EmailStr]
     password: constr(max_length=10)
 
+
 class AccountInCreate(AccountInLogin):
     user_name: str
-    role : int
-    teacher_id : int
+    role: int
+    teacher_id: int
 
 
 class AccountInUpdate(BaseModel):
-    username: Optional[str] = None
-    email: Optional[EmailStr] = None
+    email: EmailStr
     password: Optional[str] = None
-    bio: Optional[str] = None
-    image: Optional[HttpUrl] = None
+    role: Optional[int] = 1
 
 
 class AccountWithToken(Account):
     token: str
-    teacher_name :Optional[str] = ""
-    classId:Optional[int] = None
-    className:Optional[str]= None
+    teacher_name: Optional[str] = ""
+    classId: Optional[int] = None
+    className: Optional[str] = None
+
 
 class AccountTeacher(Account):
     teacher_name: str
+
 
 class AccountInResponse(RWSchema):
     data: AccountWithToken

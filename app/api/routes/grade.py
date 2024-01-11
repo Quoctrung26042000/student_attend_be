@@ -11,10 +11,11 @@ from app.models.schemas.school import (
     GradeInRepository,
     GradeInfo,
     GradeInDB,
-    GradeList
+    GradeList,
 )
 from app.resources import strings
 from app.services import jwt
+
 # from app.services.authentication import check_email_is_taken, check_username_is_taken
 from app.services.school import check_grade_is_taken
 
@@ -31,37 +32,37 @@ async def register_grade(
     grade_create: GradeInCreate = Body(),
     grade_repo: GradeRepository = Depends(get_repository(GradeRepository)),
 ) -> GradeInRepository:
-    
     if await check_grade_is_taken(grade_repo, grade_create.grade_name):
         raise HTTPException(
             status_code=HTTP_400_BAD_REQUEST,
             detail=strings.GRADE_TAKEN,
         )
     grade_created = await grade_repo.create_grade(**grade_create.dict())
-    
-    return GradeInRepository(
-        grade_name = grade_created.grade_name
-    )
+
+    return GradeInRepository(grade_name=grade_created.grade_name)
+
 
 @router.get(
     "/grade",
     response_model=GradeList,
     name="Get:grades",
 )
-async def get_grades(grade_repo: GradeRepository = Depends(get_repository(GradeRepository))):
+async def get_grades(
+    grade_repo: GradeRepository = Depends(get_repository(GradeRepository)),
+):
     grades = await grade_repo.get_grades()
-    
-    return GradeList(
-        data=grades
-    )
+
+    return GradeList(data=grades)
+
 
 @router.delete(
     "/grade/{grade_name}",
     status_code=status.HTTP_204_NO_CONTENT,
     name="comments:delete-grade",
-    response_class=Response,  
+    response_class=Response,
 )
-async def delete_grade(grade_name: int,
+async def delete_grade(
+    grade_name: int,
     grade_repo: GradeRepository = Depends(get_repository(GradeRepository)),
 ) -> None:
     if (await check_grade_is_taken(grade_repo, grade_name)) == False:
@@ -70,6 +71,3 @@ async def delete_grade(grade_name: int,
             detail=strings.GRADE_DOES_NOT_EXIST,
         )
     return await grade_repo.delete_grade_by_name(grade_name)
-
-
-

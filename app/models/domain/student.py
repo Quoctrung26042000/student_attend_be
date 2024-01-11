@@ -8,14 +8,16 @@ from app.models.domain.base_infor import Base, BaseInfor
 
 from enum import IntEnum
 
+
 class GenderEnum(IntEnum):
     male = 1
     female = 2
 
+
 class Student(RWModel, BaseInfor):
     gender: GenderEnum
-    classId:Optional[int] = None
-    
+    classId: Optional[int] = None
+
+
 class StudentInDB(IDModelMixin, DateTimeModelMixin, Student):
     pass
-

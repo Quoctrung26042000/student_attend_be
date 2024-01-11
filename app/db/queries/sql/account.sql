@@ -80,3 +80,9 @@ t.username as "nameTeacher"
 FROM account as a 
 LEFT JOIN teacher as t on t.id = a.teacher_id
 
+-- name : delete_account_by_id
+DELETE 
+FROM account
+WHERE id = :id
+RETURNING 
+id;

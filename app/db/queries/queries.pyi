@@ -6,11 +6,9 @@ from asyncpg import Connection, Record
 
 class TagsQueriesMixin:
     async def get_all_tags(self, conn: Connection) -> Record: ...
-
     async def create_new_tags(
         self, conn: Connection, tags: Sequence[Dict[str, str]]
     ) -> None: ...
-
 
 class TeacherQueriesMixin:
     async def create_new_teacher(
@@ -21,112 +19,65 @@ class TeacherQueriesMixin:
         phone: str,
         homeroom_class: id,
     ) -> Record: ...
-
     async def search_all_teacher(
         self,
         conn: Connection,
     ) -> Record: ...
-    
     async def search_teacher_unassigned(
         self,
         conn: Connection,
     ) -> Record: ...
-    
-    async def get_teacher_by_name(
-        self,
-        conn: Connection,
-        username:str
-    ) -> Record: ...
-
-    async def get_teacher_by_id(
-        self,
-        conn: Connection,
-        teacher_id:id
-    ) -> Record: ...
-
+    async def get_teacher_by_name(self, conn: Connection, username: str) -> Record: ...
+    async def get_teacher_by_id(self, conn: Connection, teacher_id: id) -> Record: ...
     async def delete_teacher_by_id(
-        self,
-        conn: Connection,
-        teacher_id:id
+        self, conn: Connection, teacher_id: id
     ) -> Record: ...
-
-    async def check_phone_is_taken(
-        self,
-        conn: Connection,
-        phone:str
-    ) -> Record: ...
-
+    async def check_phone_is_taken(self, conn: Connection, phone: str) -> Record: ...
     async def teacher_update(
         self,
         conn: Connection,
-        teacher_id:int,
-        name:str,
-        phone:str,
-        address:str,
+        teacher_id: int,
+        name: str,
+        phone: str,
+        address: str,
     ) -> Record: ...
-
     async def update_class_id(
         self,
         conn: Connection,
-        teacher_id:int,
-        class_id:int,
+        teacher_id: int,
+        class_id: int,
     ) -> Record: ...
-  
+
 class SchoolQueriesMixin:
-    
     async def create_new_grade(
         self,
         conn: Connection,
-        *,  
+        *,
         grade_name: int,
     ) -> Record: ...
     async def get_grades(self, conn: Connection) -> Record: ...
-    
-    async def delete_grade_id(
-        self, conn: Connection, *, grade_id:int
-    ) -> None: ...
-
+    async def delete_grade_id(self, conn: Connection, *, grade_id: int) -> None: ...
     async def get_grade_by_username(
         self, conn: Connection, *, grade_name: int
     ) -> Record: ...
-
     async def get_all_class(self, conn: Connection) -> Record: ...
-
     async def create_new_class(
-        self,
-        conn: Connection,
-        class_name:str,
-        grade_id:int
+        self, conn: Connection, class_name: str, grade_id: int
     ) -> Record: ...
-
     async def get_class_by_name(
         self, conn: Connection, *, class_name: str
     ) -> Record: ...
-
     async def update_teacher_is_null(
         self, conn: Connection, *, class_id: int
     ) -> Record: ...
-
-    async def delete_class_id(
-        self, conn: Connection, *, class_id: int
-    ) -> Record: ...
-
+    async def delete_class_id(self, conn: Connection, *, class_id: int) -> Record: ...
     async def get_teacher_by_class_id(
         self, conn: Connection, *, class_id: int
     ) -> Record: ...
-
-    async def get_class_by_id(
-        self, conn: Connection, *, class_id: int
-    ) -> Record: ...
-
+    async def get_class_by_id(self, conn: Connection, *, class_id: int) -> Record: ...
     async def update_class_by_id(
-        self, conn: Connection,
-        *,
-        class_id: int,
-        class_name:str,
-        grade_id:int
+        self, conn: Connection, *, class_id: int, class_name: str, grade_id: int
     ) -> Record: ...
-    
 
 class AccountQueriesMixin:
     async def get_account_by_email(self, conn: Connection, *, email: str) -> Record: ...
@@ -141,12 +92,10 @@ class AccountQueriesMixin:
         email: str,
         salt: str,
         hashed_password: str,
-        role : int,
+        role: int,
         teacher_id: int,
-        address: Optional[str]
+        address: Optional[str],
     ) -> Record: ...
-
-
     async def update_user_by_username(
         self,
         conn: Connection,
@@ -157,24 +106,17 @@ class AccountQueriesMixin:
         new_salt: str,
         new_password: str,
         new_bio: Optional[str],
-        new_image: Optional[str]
+        new_image: Optional[str],
     ) -> Record: ...
-
     async def teacher_unassigned_account(
         self,
         conn: Connection,
     ) -> Record: ...
-
     async def get_accounts(
         self,
         conn: Connection,
     ) -> Record: ...
-
-    
-
-    
-
-
+    async def delete_account_by_id(self, conn: Connection, id: int) -> Record: ...
 
 class UsersQueriesMixin:
     async def get_user_by_email(self, conn: Connection, *, email: str) -> Record: ...
@@ -188,7 +130,7 @@ class UsersQueriesMixin:
         username: str,
         email: str,
         salt: str,
-        hashed_password: str
+        hashed_password: str,
     ) -> Record: ...
     async def update_user_by_username(
         self,
@@ -200,7 +142,7 @@ class UsersQueriesMixin:
         new_salt: str,
         new_password: str,
         new_bio: Optional[str],
-        new_image: Optional[str]
+        new_image: Optional[str],
     ) -> Record: ...
 
 class ProfilesQueriesMixin:
@@ -253,7 +195,7 @@ class ArticlesQueriesMixin:
         title: str,
         description: str,
         body: str,
-        author_username: str
+        author_username: str,
     ) -> Record: ...
     async def add_tags_to_article(
         self, conn: Connection, tags_slugs: Sequence[Dict[str, str]]
@@ -267,7 +209,7 @@ class ArticlesQueriesMixin:
         new_slug: str,
         new_title: str,
         new_body: str,
-        new_description: str
+        new_description: str,
     ) -> Record: ...
     async def delete_article(
         self, conn: Connection, *, slug: str, author_username: str
@@ -283,62 +225,54 @@ class StudentQueriesMixin:
         *,
         name: str,
         phone: str,
-        gender:int,
-        address:str,
-        date_of_birth:str,
+        gender: int,
+        address: str,
+        date_of_birth: str,
         class_id: int,
     ) -> Record: ...
-
     async def student_update(
         self,
         conn: Connection,
         *,
         name: str,
         phone: str,
-        gender:int,
-        address:str,
-        date_of_birth:str,
+        gender: int,
+        address: str,
+        date_of_birth: str,
         class_id: int,
     ) -> Record: ...
-
     async def get_all_student(
         self,
         conn: Connection,
     ) -> Record: ...
-
     async def update_quantity(
         self,
         conn: Connection,
         *,
         class_id: int,
     ) -> Record: ...
-
     async def insert_new_student_in_attendance(
         self,
         conn: Connection,
         student_id: int,
     ) -> Record: ...
-
     async def delete_student_in_attendance(
         self,
         conn: Connection,
         student_id: int,
     ) -> Record: ...
-    
     async def get_student_by_name(
         self,
         conn: Connection,
         *,
         name: str,
     ) -> Record: ...
-
     async def get_student_by_phone(
         self,
         conn: Connection,
         *,
         phone: str,
     ) -> Record: ...
-
     async def delete_student_by_id(
         self,
         conn: Connection,
@@ -355,52 +289,36 @@ class StudentQueriesMixin:
     # ) -> Record: ...
 
 class AttendQueriesMixin:
-    async def get_attend_infors(
-        self, conn: Connection, *, class_id: id
-    ) -> Record: ...
-
-    async def get_statistic(
-        self, conn: Connection
-    ) -> Record: ...
-    
-
+    async def get_attend_infors(self, conn: Connection, *, class_id: id) -> Record: ...
+    async def get_statistic(self, conn: Connection) -> Record: ...
     async def search_statistic_detail(
-        self, conn: Connection,
-        class_id,
-        from_date,
-        to_date
+        self, conn: Connection, class_id, from_date, to_date
     ) -> Record: ...
-
     async def search_attend_student_detail(
-        self, conn: Connection,
-        student_id,
-        from_date,
-        to_date
+        self, conn: Connection, student_id, from_date, to_date
     ) -> Record: ...
-
     async def update_attendance_student(
-        self, conn: Connection,
+        self,
+        conn: Connection,
         attendance_id,
         status,
         note,
     ) -> Record: ...
-
     async def approve_all_by_id(
-        self, conn: Connection,
+        self,
+        conn: Connection,
         ids,
         status,
         note,
     ) -> Record: ...
-
     async def get_students_by_class_id(
-        self, conn: Connection,
+        self,
+        conn: Connection,
         class_id,
     ) -> Record: ...
-    
-    
-
-    async def get_statistic_search(self, conn: Connection,from_date,to_date)-> Record: ...
-
+    async def get_statistic_search(
+        self, conn: Connection, from_date, to_date
+    ) -> Record: ...
 
 class Queries(
     TagsQueriesMixin,
@@ -411,7 +329,7 @@ class Queries(
     TeacherQueriesMixin,
     SchoolQueriesMixin,
     StudentQueriesMixin,
-    AttendQueriesMixin
+    AttendQueriesMixin,
 ): ...
 
 queries: Queries

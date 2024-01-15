@@ -1,0 +1,10 @@
+{
+  "Name must not be empty": "Tên không được để trống", 
+  "this value has at least {limit_value} characters": "Số điện thoại phải có ít nhất {limit_value} kí tự",
+  "ensure this value has at least {limit_value} characters": "Số điện thoại phải có ít nhất {limit_value} kí tự",
+  "Date of birth must not be empty":"Ngày sinh không được để trống",
+  "Address must not be empty": "Địa chỉ không được để trống",
+  "value is not a valid integer": "Giới tính không đúng định dạng Name(0) or Nu(1)",
+  "time data {date} does not match format '%d-%m-%Y'": " {date} Khống đúng định dạng d/m/y",
+  "value is not a valid email address": "Địa chỉ email không đúng"
+}

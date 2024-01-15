@@ -115,6 +115,8 @@ async def protected_route(
             str(settings.secret_key.get_secret_value()),
         )
         account = await users_repo.get_account_by_username(username=username)
+        if account.teacher_name is None:
+            account.teacher_name = "Admin"
         return AccountInResponse(
             data=AccountWithToken(
                 username=account.username,
@@ -122,6 +124,8 @@ async def protected_route(
                 role=account.role,
                 token=token,
                 teacher_id=account.teacher_id,
+                teacher_name=account.teacher_name,
+                classId=account.classId
             ),
         )
     except Exception as e:

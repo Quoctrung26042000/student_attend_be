@@ -130,7 +130,7 @@ FROM
     --     c.grade_id = :grade_id AND c.id = :class_id;
     --name: search_statistic_detail
 SELECT
-    subquery.student_id As "studentId",
+    subquery.student_id As "id",
     subquery.name,
     subquery.phone,
     subquery.gender,
